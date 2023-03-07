@@ -1,0 +1,206 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #262335;
+	opacity: 1;
+	/* background-image: radial-gradient(
+		#212943 0.6000000000000001px,
+		#0f141c 0.6000000000000001px
+	); */
+	background-size: 12px 12px;
+	color: white;
+}
+
+a {
+	text-decoration: none;
+}
+
+h2 {
+	/* margin-bottom: 12px; */
+	font-size: 25px;
+	color: hsl(280deg, 100%, 80%);
+}
+
+/* 聊天公共页样式 */
+.chatPage {
+  height: 100vh;
+	grid-area: main;
+	display: grid;
+	grid-template-rows: 2fr 10fr 1fr;
+	grid-template-areas:
+		'.header'
+		'#message-list'
+		'.footer';
+	border: 1px solid #fff;
+}
+
+.header {
+	/* background: #fff; */
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+	border: 1px solid #fff;
+	color: #fff;
+}
+
+.userinfo{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.userinfo img{
+  width:30px;
+  height: 30px;
+  border-radius: 15px;
+}
+
+.message {
+	/* width: 80%; */
+	background: #ffffff;
+	text-align: center;
+	margin-top: 15px;
+	padding: 5px;
+	border-radius: 10px;
+	font-size: 18px;
+	font-weight: 700;
+	color: #00000080;
+	word-break: break-all;
+}
+
+.chatbubble{
+  display: flex;
+  flex-direction: column;
+}
+
+.time{
+  margin: 6px;
+  margin-left: 24px;
+  word-spacing: 1rem;
+}
+
+.bubble{
+  padding: 15px 22px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+  border-radius: 100px;
+  position: relative;
+  z-index: 10;
+}
+
+.bubbletip{
+  position: absolute;
+  bottom:-15%;
+  left: 0;
+  z-index: 5;
+
+  /* other */
+  transform: rotateY(180deg);
+  left: unset;
+  right: 0;
+}
+
+
+.message img{
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  float: left;
+}
+
+.nickname{
+  text-align: left;
+}
+
+.msgtext{
+  text-align: left;
+}
+
+.self{
+  background: #4f9dde;
+}
+
+.self img{
+  float: right;
+}
+
+.self .nickname{
+  text-align: right;
+}
+
+.self .msgtext{
+  text-align: right;
+}
+
+
+
+/* 佈局設置 */
+.flex {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+}
+
+.flex-jc-fe{
+  justify-content: flex-end;
+}
+
+.flex-jc-sb{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+
+.flex-ai{
+  display: flex;
+  align-items: center;
+}
+
+.flex-ac-jsb{
+  display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.flex-ac-jc{
+  display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+/* 间距设置 */
+.standard{
+  margin-bottom: 10px;
+}
+
+/* 字體設置 */
+.f-large{
+  font-size: 25px;
+}
+
+.f-mid{
+  font-size: 20px;
+  color: #babbc1;
+  /* text-align: center; */
+  /* font-weight: 700; */
+}
+
+.f-small{
+  font-size: 15px;
+  font-weight: 700;
+  /* text-align: center; */
+}
+
+/* .f-gray{
+  color: #b7b8be;
+} */
+
+.search-area {
+	margin: 20px 10px;
+}

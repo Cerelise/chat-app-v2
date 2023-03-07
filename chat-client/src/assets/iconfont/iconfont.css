@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3910131 */
+  src: url('iconfont.woff2?t=1678188975507') format('woff2'),
+       url('iconfont.woff?t=1678188975507') format('woff'),
+       url('iconfont.ttf?t=1678188975507') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-github:before {
+  content: "\e632";
+}
+
+.icon-bilibili-line:before {
+  content: "\e75d";
+}
+
+.icon-emojifill:before {
+  content: "\e78d";
+}
+
+.icon-message:before {
+  content: "\e666";
+}
+
+.icon-blog:before {
+  content: "\e627";
+}
+
+.icon-message1:before {
+  content: "\e617";
+}
+
+.icon-ellipsis:before {
+  content: "\e637";
+}
+
+.icon-setting:before {
+  content: "\e78e";
+}
+
+.icon-file-markdown-fill:before {
+  content: "\e857";
+}
+
+.icon-setting-fill:before {
+  content: "\e871";
+}
+
+.icon-user-group-fill:before {
+  content: "\e7d3";
+}
+
+.icon-user-fill:before {
+  content: "\e7d5";
+}
+
+.icon-search:before {
+  content: "\e82e";
+}
+
+.icon-file-fill:before {
+  content: "\e61f";
+}
+
+.icon-file-open:before {
+  content: "\e670";
+}
+

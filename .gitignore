@@ -1,0 +1,11 @@
+# Backend
+chat-server/chat_venv
+chat-server/chat_websocket/db.sqlite3
+chat-server/*/*/settings.py
+chat-server/*/*/__pycache__
+chat-server/chat_websocket/chat_app/__pycache__
+chat-server/chat_websocket/chat_app/migrations
+
+# Frontend
+chat-client/node_modules
+chat-client/.vscode
