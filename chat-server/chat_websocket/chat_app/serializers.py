@@ -7,5 +7,5 @@ class Userinfo_data(serializers.ModelSerializer):
         model = Userinfo
         fields = [
             'nickName', 'avatar', 'area', 'description', 'github', 'socialSite',
-            'phone', 'email', 'website'
+            'phone', 'email', 'website', 'id'
         ]

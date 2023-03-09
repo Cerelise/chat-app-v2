@@ -21,7 +21,8 @@ def dchat_login(request):
     if user:
         isnotUser = check_password(password, user[0].password)
         if isnotUser:
-            token = Token.objects.get_or_create(user=user[0])
+            Token.objects.filter(user=user[0]).delete()
+            token = Token.objects.create(user=user[0])
             token = Token.objects.get(user=user[0]).key
             return Response(token)
         else:
