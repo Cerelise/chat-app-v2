@@ -13,7 +13,7 @@ const routes = [
 		// component: Homepage,
 		name: 'Homepage',
 		children: [
-			{
+			{ 
 				path: 'settings',
 				components: {
 					userinfo: () => import('./components/Userinfo.vue'),
@@ -22,10 +22,14 @@ const routes = [
 			},
 			{
 				path: 'chat',
+				name: 'Chat',
 				components: {
 					userinfo: () => import('./components/UserList.vue'),
-					default: () => import('./pages/Chat.vue'),
+					default: () => import('./pages/PrivateChat.vue'),
 				},
+				// props: (route) => ({
+				// 	id: route.params.otherUser.id,
+				// }),
 			},
 		],
 		beforeEnter: (to, from, next) => {

@@ -1,5 +1,140 @@
+<template>
+	<div class="layout">
+		<!-- {{ $store.state.token }} -->
+		<nav class="globalNav">
+			<div class="nav-top">
+				<el-avatar
+					class="avatar"
+					shape="circle"
+					:size="40"
+					:src="userinfo.avatar"
+				/>
+			</div>
+			<div class="nav-mid">
+				<!-- <Navitem v-for="nav in iconList" :to="nav.to" :icon="nav.icon" /> -->
+				<Navitem to="/" icon="icon-user-group-fill" />
+
+				<el-badge v-if="unreadList.length != 0" :value="unreadList.length">
+					<Navitem
+						@click="openOtherChat(unreadList)"
+						to="/chat"
+						icon="icon-message1"
+					/>
+				</el-badge>
+				<Navitem v-else to="/chat" icon="icon-message1" />
+				<Navitem to="/blog" icon="icon-file-fill" />
+				<Navitem to="/all" icon="icon-ellipsis" />
+			</div>
+			<div class="nav-down">
+				<!-- <router-link to="/settings">
+					<div style="margin-top: 12px">
+						<TheIcon class="box" icon="icon-setting-fill" :sizes="22" />
+					</div>
+				</router-link> -->
+				<Navitem to="/settings" icon="icon-setting-fill" />
+			</div>
+		</nav>
+		<div class="itemList">
+			<!-- <router-view :unreadList="unreadList" name="userlist"></router-view> -->
+			<router-view
+				:unreadList="unreadList"
+				:otherChatData="privateList"
+				name="userinfo"
+				@currentChat="openOtherChat"
+			></router-view>
+			<template v-if="$route.path == '/'">
+				<div class="search-area">
+					<Search></Search>
+				</div>
+				<div class="operations">
+					<Options
+						type="全部用户"
+						option1="全部用户"
+						option2="在线用户"
+					></Options>
+				</div>
+				<UserCard v-for="item in 4" />
+			</template>
+		</div>
+		<main class="chatPage">
+			<!-- <router-view name="private-chat"></router-view> -->
+			<router-view
+				@privateMsg="sendMessage"
+				@pushSelfMsg="pushSelfMsg"
+				:msgList="privateList"
+			></router-view>
+			<template v-if="$route.path == '/'">
+				<div class="header">
+					<h2>{{ title }}</h2>
+					<div class="userinfo">
+						<span>当前用户：</span>
+						<img :src="userinfo.avatar" alt="" />
+						<span>{{ userinfo.nickName }}</span>
+						<!-- {{ store.state.token }} -->
+					</div>
+				</div>
+				<div id="message-list">
+					<!-- <div v-for="(item, index) in msgList" :key="index">
+						<div
+							v-if="userinfo.nickName != item.nickName"
+							class="other message"
+						>
+							<el-avatar
+								:src="'http://127.0.0.1:9000/upload/' + item.avatar"
+								@click="openOtherChat(item)"
+							/>
+							<div class="msgtext">{{ item.data[0].text }}</div>
+						</div>
+
+						<div v-else class="self message">
+							<el-avatar :src="'http://127.0.0.1:9000/upload/' + item.avatar" />
+							<div class="msgtext">{{ item.data[0].text }}</div>
+						</div>
+					</div> -->
+					<div
+						v-for="(item, index) in msgList"
+						:key="index"
+						:class="{
+							other: userinfo.nickName != item.nickName,
+							self: userinfo.nickName == item.nickName,
+						}"
+					>
+						<div
+							class="flex-ai"
+							:class="{ flex_di: userinfo.nickName == item.nickName }"
+						>
+							<el-avatar
+								v-if="userinfo.nickName != item.nickName"
+								:src="'http://127.0.0.1:9000/upload/' + item.avatar"
+								alt=""
+								@click="openOtherChat(item)"
+							/>
+							<el-avatar
+								v-else
+								:src="'http://127.0.0.1:9000/upload/' + item.avatar"
+								alt=""
+							/>
+							<div class="message" style="text-align: left">
+								{{ item.data[0].text }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="footer">
+					<input
+						@keydown.enter="enterSendmsg()"
+						v-model="text_input"
+						type="text"
+					/>
+					<button @click="clickToSend">send</button>
+				</div>
+			</template>
+		</main>
+	</div>
+</template>
+
 <script setup>
-import { ref, reactive, onMounted, computed, nextTick, watch } from 'vue'
+import { ref, reactive, onMounted, computed, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
@@ -8,41 +143,74 @@ import Options from '../components/Options.vue'
 import Navitem from '../components/NavItem.vue'
 import UserCard from '../components/UserCard.vue'
 import { ElNotification } from 'element-plus'
-// const store = useStore()
-// const route = useRouter()
+
+const store = useStore()
+const router = useRouter()
 
 const title = ref('')
 const websocket = ref('')
 const text_input = ref('')
 const msgList = reactive([])
-const iconList = reactive([
-	{ to: '/', icon: 'icon-user-group-fill' },
-	{ to: '/chat', icon: 'icon-message1' },
-	{ to: '/blog', icon: 'icon-file-fill' },
-	{ to: '/all', icon: 'icon-ellipsis' },
-])
-// const userinfo = reactive([])
-const store = useStore()
-const route = useRouter()
+const privateList = reactive({
+	nickName: '',
+	avatar: '',
+	data: [],
+	id: Number,
+	from: Number,
+})
+const unreadList = reactive([])
+const inOtherChat = ref(false)
+
+// const iconList = reactive([
+// 	{ to: '/', icon: 'icon-user-group-fill' },
+// 	{ to: '/chat', icon: 'icon-message1' },
+// 	{ to: '/blog', icon: 'icon-file-fill' },
+// 	{ to: '/all', icon: 'icon-ellipsis' },
+// ])
 
 const userinfo = computed(() => {
 	return store.state.userinfo
 })
+// console.log(userinfo.value.id)
 
 const token = computed(() => {
 	return store.state.token
 })
 
-// watch((newVal) => {
-// 	if (newVal[0]) {
-// 		console.log('-----公共频道token监听-----')
-// 		console.log(newVal[0])
-// 		initWebSocket()
-// 	}
-// })
-
 // console.log('vuex:' + token.value)
 // console.log('vuexu:' + getuserinfo.value)
+
+// 打开私聊窗口
+function openOtherChat(data) {
+	privateList.nickName = data.nickName
+	privateList.avatar = data.avatar
+	privateList.data = data.data
+	privateList.id = data.id
+	privateList.from = data.from
+	inOtherChat.value = true
+	// privateList.data = []
+	router.push({
+		name: 'Chat',
+	})
+	// console.log(privateList)
+	// console.log(data)
+}
+// query 弃用
+// function openOtherChat(other) {
+// 	router.push({
+// 		name: 'Chat',
+// 		query: {
+// 			nickName: other.nickName,
+// 			avatar: other.avatar,
+// 			id: other.id,
+// 			data: JSON.stringify(other.data),
+// 		},
+// 	})
+// }
+
+function pushSelfMsg(text) {
+	privateList.data.push(text)
+}
 
 // 自动登录
 function autoLogin() {
@@ -105,7 +273,9 @@ function getData() {
 
 // 初始化websocket
 function initWebSocket() {
-	websocket.value = new WebSocket('ws://127.0.0.1:9000/chat/myroom/')
+	websocket.value = new WebSocket(
+		'ws://127.0.0.1:9000/chat/myroom/' + userinfo.value.id + '/'
+	)
 	console.log(websocket)
 	websocket.value.onopen = onOpen
 	websocket.value.onmessage = onMessage
@@ -132,13 +302,15 @@ function onOpen(e) {
 // 接收message
 function onMessage(e) {
 	// console.log(e)
+
 	let receive = JSON.parse(e.data).message
 	console.log(receive)
 	if (receive.code == 100 || receive.code == 200) {
 		let msg_item = {
 			nickName: receive.nickName,
 			avatar: receive.avatar,
-			data: receive.data,
+			data: [receive.data],
+			id: receive.id,
 		}
 		msgList.push(msg_item)
 		// 操作dom使滚轴自动滚动至最新消息
@@ -147,10 +319,46 @@ function onMessage(e) {
 			list_dom.scrollTop = list_dom.scrollHeight
 		})
 	}
+	// 未读消息显示
+	if (receive.code == 201) {
+		if (inOtherChat.value) {
+			// console.log(inOtherChat.value)
+			if (privateList.id == receive.from) {
+				privateList.data.push(receive.data)
+			}
+		} else {
+			if (unreadList.length == 0) {
+				let msg_item = {
+					nickName: receive.nickName,
+					avatar: receive.avatar,
+					data: [receive.data],
+					id: receive.id,
+					from: receive.from,
+				}
+				unreadList.push(msg_item)
+			} else {
+				for (let i = 0; i < unreadList.length; i++) {
+					if (unreadList[i].from == receive.from) {
+						unreadList[i].data.push(receive.data)
+						return
+					}
+				}
+				let msg_item = {
+					nickName: receive.nickName,
+					avatar: receive.avatar,
+					data: [receive.data],
+					id: receive.id,
+					from: receive.from,
+				}
+				unreadList.push(msg_item)
+			}
+		}
+	}
 }
 
 // 发送信息
 function sendMessage(msg) {
+	// console.log(msg)
 	let text_data = JSON.stringify(msg)
 	websocket.value.send(text_data)
 }
@@ -166,7 +374,7 @@ function onClose(e) {
 		message: '登录已过期，请重新登录',
 		type: 'error',
 	})
-	route.push({ name: 'Login' })
+	// route.push({ name: 'Login' })
 }
 
 onMounted(() => {
@@ -178,117 +386,6 @@ onMounted(() => {
 })
 </script>
 
-<template>
-	<div class="layout">
-		<!-- {{ $store.state.token }} -->
-		<nav class="globalNav">
-			<div class="nav-top">
-				<el-avatar
-					class="avatar"
-					shape="circle"
-					:size="40"
-					:src="userinfo.avatar"
-				/>
-			</div>
-			<div class="nav-mid">
-				<!-- <div>
-					<router-link to="/" class="flex-ac-jsb">
-						<TheIcon class="box" icon="icon-user-group-fill" :sizes="22" />
-					</router-link>
-				</div>
-				<div>
-					<router-link to="/chat" class="flex-ac-jsb">
-						<TheIcon class="box" icon="icon-message1" :sizes="22" />
-					</router-link>
-				</div>
-				<div>
-					<router-link to="/blog" class="flex-ac-jsb">
-						<TheIcon class="box" icon="icon-file-fill" :sizes="22" />
-					</router-link>
-				</div>
-				<div>
-					<router-link to="/all" class="flex-ac-jsb">
-						<TheIcon class="box" icon="icon-ellipsis" :sizes="22" />
-					</router-link>
-				</div> -->
-
-				<Navitem v-for="nav in iconList" :to="nav.to" :icon="nav.icon" />
-			</div>
-			<div class="nav-down">
-				<!-- <router-link to="/settings">
-					<div style="margin-top: 12px">
-						<TheIcon class="box" icon="icon-setting-fill" :sizes="22" />
-					</div>
-				</router-link> -->
-				<Navitem to="/settings" icon="icon-setting-fill" />
-			</div>
-		</nav>
-		<div class="itemList">
-			<!-- <router-view name="userlist"></router-view> -->
-			<router-view name="userinfo"></router-view>
-			<template v-if="$route.path == '/'">
-				<div class="search-area">
-					<Search></Search>
-				</div>
-				<div class="operations">
-					<Options
-						type="全部用户"
-						option1="全部用户"
-						option2="在线用户"
-					></Options>
-				</div>
-				<UserCard v-for="item in 4" />
-			</template>
-		</div>
-		<main class="chatPage">
-			<!-- <router-view name="pchat"></router-view> -->
-			<router-view></router-view>
-			<template v-if="$route.path == '/'">
-				<div class="header">
-					<h2>{{ title }}</h2>
-					<div class="userinfo">
-						<span>当前用户：</span>
-						<img :src="userinfo.avatar" alt="" />
-						<span>{{ userinfo.nickName }}</span>
-						<!-- {{ store.state.token }} -->
-					</div>
-				</div>
-				<div id="message-list">
-					<div v-for="(item, index) in msgList" :key="index">
-						<div
-							v-if="userinfo.nickName != item.nickName"
-							class="other message"
-						>
-							<img
-								:src="'http://127.0.0.1:9000/upload/' + item.avatar"
-								alt=""
-							/>
-							<div class="nickname">{{ item.nickName }}</div>
-							<div class="msgtext">{{ item.data.text }}</div>
-						</div>
-						<div v-else class="self message">
-							<img
-								:src="'http://127.0.0.1:9000/upload/' + item.avatar"
-								alt=""
-							/>
-							<div class="nickname">{{ item.nickName }}</div>
-							<div class="msgtext">{{ item.data.text }}</div>
-						</div>
-					</div>
-				</div>
-				<div class="footer">
-					<input
-						@keydown.enter="enterSendmsg()"
-						v-model="text_input"
-						type="text"
-					/>
-					<button @click="clickToSend">send</button>
-				</div>
-			</template>
-		</main>
-	</div>
-</template>
-
 <style scoped>
 .layout {
 	width: 100vw;
@@ -296,7 +393,7 @@ onMounted(() => {
 	max-width: 100%;
 	max-height: 100%;
 	display: grid;
-	grid-template-columns: 5% 25% 70%;
+	grid-template-columns: 80px 30% 10fr;
 	/* grid-template-rows: 1fr; */
 	grid-template-areas: 'nav div main';
 	/* justify-content: space-between; */
@@ -361,36 +458,22 @@ onMounted(() => {
 	padding: 15px;
 	overflow-y: scroll;
 }
-
-.footer {
-	background: #fbfafa;
+#message-list .other {
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	justify-content: start;
 }
-
-.footer input {
-	width: 80%;
-	padding: 8px 14px;
-	border: 1px solid hsl(280deg, 50%, 50%);
-	border-radius: 4px;
-	outline: none;
-	background: hsl(280deg, 50%, 30%, 0.2);
-	color: white;
-	margin-right: 10px;
+#message-list .self {
+	display: flex;
+	justify-content: end;
+	background-color: none;
 }
-
-.footer button {
-	border: none;
-	background: linear-gradient(
-		90deg,
-		hsl(240deg, 50%, 50%),
-		hsl(280deg, 50%, 50%)
-	);
-	padding: 1em 2em;
-	/* margin-top: 24px;
-	margin-right: 12px; */
-	border-radius: 4px;
-	color: white;
+#message-list .self .message {
+	background-color: #4f9dde;
 }
+.other {
+	cursor: pointer;
+}
+/* .flex_di {
+	flex-direction: row-reverse;
+} */
 </style>

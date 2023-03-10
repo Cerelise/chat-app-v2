@@ -8,11 +8,12 @@
 
 <script setup>
 import TheIcon from './TheIcon.vue'
-// import { useRouter } from 'vue-router'
+// import { onMounted } from 'vue'
 
 defineProps({
 	to: String,
 	icon: String,
+	// unreadList: Object,
 })
 </script>
 

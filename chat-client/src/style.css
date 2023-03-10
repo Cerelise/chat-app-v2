@@ -59,19 +59,6 @@ h2 {
   border-radius: 15px;
 }
 
-.message {
-	/* width: 80%; */
-	background: #ffffff;
-	text-align: center;
-	margin-top: 15px;
-	padding: 5px;
-	border-radius: 10px;
-	font-size: 18px;
-	font-weight: 700;
-	color: #00000080;
-	word-break: break-all;
-}
-
 .chatbubble{
   display: flex;
   flex-direction: column;
@@ -103,36 +90,82 @@ h2 {
   right: 0;
 }
 
-
-.message img{
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-  float: left;
+.message {
+  /* min-width:10vw;
+  max-width: 20vw; */
+	background: #ffffff;
+	text-align: center;
+  margin: 5px 5px 5px 5px ;
+	padding: 5px;
+	border-radius: 10px;
+	font-size: 18px;
+	font-weight: 700;
+	color: #00000080;
+	word-break: break-all;
 }
 
-.nickname{
+/* .nickname{
   text-align: left;
 }
 
-.msgtext{
-  text-align: left;
+
+.msgtext {
+	text-align: left;
+}
+
+.other .el-avatar{
+  float: left!important;
 }
 
 .self{
   background: #4f9dde;
 }
 
-.self img{
-  float: right;
+.self .el-avatar{
+  float: right!important;
 }
+
 
 .self .nickname{
   text-align: right;
 }
 
-.self .msgtext{
-  text-align: right;
+
+.self .msgtext {
+	text-align: right;
+} */
+
+
+.footer {
+	background: #fbfafa;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.footer input {
+	width: 80%;
+	padding: 8px 14px;
+	border: 1px solid hsl(280deg, 50%, 50%);
+	border-radius: 4px;
+	outline: none;
+	background: hsl(280deg, 50%, 30%, 0.2);
+	color: white;
+	margin-right: 10px;
+}
+
+.footer button {
+	border: none;
+	background: linear-gradient(
+		90deg,
+		hsl(240deg, 50%, 50%),
+		hsl(280deg, 50%, 50%)
+	);
+	padding: 1em 2em;
+	/* margin-top: 24px;
+	margin-right: 12px; */
+	border-radius: 4px;
+	color: white;
 }
 
 
@@ -171,6 +204,10 @@ h2 {
   display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.flex_di {
+	flex-direction: row-reverse;
 }
 
 
