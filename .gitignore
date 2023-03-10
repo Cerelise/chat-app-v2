@@ -5,6 +5,7 @@ chat-server/*/*/settings.py
 chat-server/*/*/__pycache__
 chat-server/chat_websocket/chat_app/__pycache__
 chat-server/chat_websocket/chat_app/migrations
+chat-server/chat_websocket/upload/
 
 # Frontend
 chat-client/node_modules
