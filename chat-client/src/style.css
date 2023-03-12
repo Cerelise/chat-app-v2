@@ -32,13 +32,14 @@ h2 {
 	display: grid;
 	grid-template-rows: 2fr 10fr 1fr;
 	grid-template-areas:
-		'.header'
-		'#message-list'
-		'.footer';
+		'header'
+		'message-list'
+		'footer';
 	border: 1px solid #fff;
 }
 
 .header {
+  grid-area: header;
 	/* background: #fff; */
   display: flex;
   align-items: center;
@@ -137,6 +138,7 @@ h2 {
 
 
 .footer {
+  grid-area: footer;
 	background: #fbfafa;
 	display: flex;
 	justify-content: center;
@@ -168,6 +170,14 @@ h2 {
 	color: white;
 }
 
+.itemList_ro_t {
+	grid-area: div;
+  overflow-y: scroll;
+}
+
+.itemList_ro_f{
+  grid-area: div;
+}
 
 
 /* 佈局設置 */

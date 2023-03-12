@@ -1,6 +1,5 @@
 <template>
 	<div class="layout">
-		<!-- {{ $store.state.token }} -->
 		<nav class="globalNav">
 			<div class="nav-top">
 				<el-avatar
@@ -31,10 +30,19 @@
 						<TheIcon class="box" icon="icon-setting-fill" :sizes="22" />
 					</div>
 				</router-link> -->
-				<Navitem to="/settings" icon="icon-setting-fill" />
+				<Navitem
+					@click="changePage()"
+					to="/settings"
+					icon="icon-setting-fill"
+				/>
 			</div>
 		</nav>
-		<div class="itemList">
+		<div
+			:class="{
+				itemList_ro_t: openSetting === false,
+				itemList_ro_f: openSetting === true,
+			}"
+		>
 			<!-- <router-view :unreadList="unreadList" name="userlist"></router-view> -->
 			<router-view
 				:unreadList="unreadList"
@@ -53,11 +61,17 @@
 						option2="在线用户"
 					></Options>
 				</div>
-				<UserCard v-for="item in 4" />
+				<div class="userlist">
+					<UserCard
+						v-for="item in userList"
+						:name="item.nickName"
+						:avatar="item.avatar"
+						:desc="item.description"
+					/>
+				</div>
 			</template>
 		</div>
 		<main class="chatPage">
-			<!-- <router-view name="private-chat"></router-view> -->
 			<router-view
 				@privateMsg="sendMessage"
 				@pushSelfMsg="pushSelfMsg"
@@ -137,7 +151,7 @@
 import { ref, reactive, onMounted, computed, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import Search from '../components/Search.vue'
 import Options from '../components/Options.vue'
 import Navitem from '../components/NavItem.vue'
@@ -146,9 +160,11 @@ import { ElNotification } from 'element-plus'
 
 const store = useStore()
 const router = useRouter()
+const route = useRoute()
 
 const title = ref('')
 const websocket = ref('')
+const userList = ref([])
 const text_input = ref('')
 const msgList = reactive([])
 const privateList = reactive({
@@ -159,6 +175,9 @@ const privateList = reactive({
 	from: Number,
 })
 const unreadList = reactive([])
+// 监控是否打开了设置页
+// const openSetting = ref(false)
+// 判断此时是否在聊天页面内
 const inOtherChat = ref(false)
 
 // const iconList = reactive([
@@ -177,8 +196,37 @@ const token = computed(() => {
 	return store.state.token
 })
 
-// console.log('vuex:' + token.value)
-// console.log('vuexu:' + getuserinfo.value)
+// 获取用户列表
+function getUserList() {
+	axios({
+		method: 'get',
+		url: 'http://127.0.0.1:9000/api-chat/userinfo/',
+	}).then((res) => {
+		userList.value = res.data
+		console.log(userList.value)
+	})
+}
+
+// 获取标题
+function getData() {
+	axios({
+		method: 'get',
+		url: 'http://127.0.0.1:9000/api/',
+	}).then((res) => {
+		// console.log(res)
+		title.value = res.data.title
+	})
+}
+
+// 控制列表页与设置页的切换
+function changePage() {
+	console.log(router.to)
+	// if (router.path === '/settings') {
+	// 	openSetting = true
+	// } else {
+	// 	openSetting = false
+	// }
+}
 
 // 打开私聊窗口
 function openOtherChat(data) {
@@ -260,23 +308,12 @@ function clickToSend() {
 	// })
 }
 
-// 获取标题
-function getData() {
-	axios({
-		method: 'get',
-		url: 'http://127.0.0.1:9000/api/',
-	}).then((res) => {
-		// console.log(res)
-		title.value = res.data.title
-	})
-}
-
 // 初始化websocket
 function initWebSocket() {
 	websocket.value = new WebSocket(
 		'ws://127.0.0.1:9000/chat/myroom/' + userinfo.value.id + '/'
 	)
-	console.log(websocket)
+	// console.log(websocket)
 	websocket.value.onopen = onOpen
 	websocket.value.onmessage = onMessage
 	websocket.value.onerror = onError
@@ -379,6 +416,8 @@ function onClose(e) {
 
 onMounted(() => {
 	// autoLogin()
+	getUserList()
+	console.log(userList)
 	getData()
 	if (localStorage.getItem('token')) {
 		initWebSocket()
@@ -449,12 +488,8 @@ onMounted(() => {
 	justify-content: center;
 }
 
-.itemList {
-	grid-area: div;
-	/* background: #fbfbfb; */
-}
-
 #message-list {
+	grid-area: message-list;
 	padding: 15px;
 	overflow-y: scroll;
 }

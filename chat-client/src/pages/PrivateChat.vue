@@ -17,7 +17,7 @@
 			</div>
 		</div> -->
 
-		<div v-for="(item, index) in msgList.data" :key="index">
+		<!-- <div v-for="(item, index) in msgList.data" :key="index">
 			<div v-if="item.to" class="other message">
 				<el-avatar
 					:size="25"
@@ -28,6 +28,22 @@
 			<div v-else class="self message">
 				<el-avatar :size="25" :src="userinfo.avatar" />
 				<div style="text-align: right">{{ item.text }}</div>
+			</div>
+		</div> -->
+		<div v-for="(item, index) in msgList.data" :key="index">
+			<div v-if="item.to" class="other">
+				<div class="flex-ai">
+					<el-avatar
+						:src="'http://127.0.0.1:9000/upload/' + msgList.avatar"
+					/>
+					<div class="message" style="text-align: left">{{ item.text }}</div>
+				</div>
+			</div>
+			<div v-else class="self">
+				<div class="flex-ai flex_di">
+					<el-avatar :src="userinfo.avatar" />
+					<div class="message" style="text-align: right">{{ item.text }}</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -130,13 +146,13 @@ onMounted(() => {
 	text-align: left;
 }
 
-.other .el-avatar {
+/* .other .el-avatar {
 	float: left !important;
-}
+} */
 
-.self {
+/* .self {
 	background: #4f9dde;
-}
+} */
 
 .self .el-avatar {
 	float: right !important;
@@ -150,18 +166,17 @@ onMounted(() => {
 	text-align: right;
 }
 
-/* #message-list .other {
+#message-list .other {
 	display: flex;
 	justify-content: start;
 }
 #message-list .self {
 	display: flex;
 	justify-content: end;
-	background-color: none;
 }
 #message-list .self .message {
 	background-color: aqua;
-} */
+}
 .other {
 	cursor: pointer;
 }

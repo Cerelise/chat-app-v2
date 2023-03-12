@@ -1,46 +1,55 @@
 <template>
-	<div class="card">
-		<el-avatar :size="50" src="http://127.0.0.1:9000/upload/avatar.png" />
-		<div class="info">
-			<div class="name">Alex</div>
-			<div class="status">在线</div>
-			<div class="desc">即使爬到最高的山上，一次也只能脚踏实地666</div>
+	<div class="card-container">
+		<div class="avatar">
+			<el-avatar size="medium" :src="avatar" />
 		</div>
+		<div class="name">{{ name }}</div>
+		<div class="status">在线</div>
+		<div class="desc">{{ desc }}</div>
 	</div>
 </template>
 
-<script setup></script>
+<script setup>
+defineProps(['name', 'avatar', 'desc'])
+</script>
 
 <style scoped>
-.card {
-	display: flex;
+.card-container {
+	margin: 10px;
+	padding: 20px 20px;
+	box-shadow: 0 18px 40px 0 rgba(133, 238, 167, 0.2);
+	border-radius: 6px;
+	display: grid;
+	grid-template-areas:
+		'avatar name name'
+		'avatar status status'
+		'desc desc desc';
+	grid-template-columns: 64px 1fr 1fr;
+	/* grid-template-rows: 1fr 1fr 1fr; */
+	background: #696d81;
 	align-items: center;
-	margin: 15px;
-	padding: 10px 12px 10px 24px;
-	border: 2px solid hsl(280deg, 100%, 90%);
-	border-radius: 10px;
+	row-gap: 5px;
 }
 
-.card .info {
-	flex: 4;
-	padding-left: 20px;
-	font-size: 14px;
-	min-width: 0;
+.card-container .avatar {
+	grid-area: avatar;
 }
 
-.card .info .desc {
+.card-container .name {
+	grid-area: name;
+	font-size: 20px;
+	font-weight: 700;
+}
+
+.card-container .status {
+	grid-area: status;
+	font-size: 12px;
+	color: #76828d;
+}
+.card-container .desc {
+	grid-area: desc;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
-}
-
-.card .info .name {
-	font-size: 16px;
-	padding-bottom: 4px;
-}
-.card .info .status {
-	color: #a5a9ad;
-	font-size: 12px;
-	padding-bottom: 4px;
 }
 </style>

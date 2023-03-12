@@ -16,6 +16,7 @@ export default createStore({
 			phone: null,
 			email: null,
 			website: null,
+			id: null,
 		},
 		token: null,
 	},

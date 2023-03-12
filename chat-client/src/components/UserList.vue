@@ -15,7 +15,6 @@
 				:msg="item.data[item.data.length - 1].text"
 				:unread="item.data.length"
 			/>
-			{{ unreadList }}
 		</div>
 	</div>
 </template>
