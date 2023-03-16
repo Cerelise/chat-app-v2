@@ -1,4 +1,4 @@
-import { createStore } from 'vuex'
+import { createLogger, createStore } from 'vuex'
 import axios from 'axios'
 import Qs from 'qs'
 
@@ -29,6 +29,10 @@ export default createStore({
 			state.token = token
 			// console.log(state.token)
 		},
+		// 清空用户登录状态
+		clearToken(state) {
+			state.token = ''
+		},
 	},
 	actions: {
 		// 自动登录
@@ -40,7 +44,7 @@ export default createStore({
 
 			await axios({
 				method: 'post',
-				url: 'http://127.0.0.1:9000/api-chat/userinfo/',
+				url: HostURL + '/api-chat/userinfo/',
 				data: Qs.stringify({
 					token: token,
 				}),
@@ -56,6 +60,22 @@ export default createStore({
 				commit('saveUserinfo', userinfo)
 			})
 			return loginType
+		},
+		// 退出登录
+		async userLogout({ commit }) {
+			let token = localStorage.getItem('token')
+			await axios({
+				url: HostURL + '/api-chat/dchat-logout/',
+				method: 'post',
+				data: Qs.stringify({
+					token,
+				}),
+			}).then((res) => {
+				console.log(res.data)
+				// 清除vuex里的token
+				commit('clearToken')
+				localStorage.removeItem('token')
+			})
 		},
 	},
 	modules: {},

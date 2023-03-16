@@ -1,65 +1,54 @@
 <template>
-	<div class="p-header">
-		<el-avatar :src="'http://127.0.0.1:9000/upload/' + msgList.avatar" />
-		<div class="info">
-			<div class="name">{{ msgList.nickName }}</div>
-			<div class="status">在线 最后阅读时间：3小时前</div>
-		</div>
+	<div v-if="inPrivateChat === false" class="defaultpage">
+		<img
+			style="height: 200px; object-fit: cover; object-position: center"
+			src="../assets/bg-pic/undraw_chat.svg"
+			alt=""
+		/>
 	</div>
-	<div id="message-list">
-		<!-- <div v-for="(item, index) in msgList.data" :key="index">
-			<div class="flex-ai">
-				<el-avatar
-					:size="30"
-					:src="'http://127.0.0.1:9000/upload/' + msgList.avatar"
-				/>
-				<div class="message" style="text-align: left">{{ item.text }}</div>
+	<div v-else class="chatpage">
+		<div class="p-header">
+			<el-avatar :src="'http://127.0.0.1:9000/upload/' + msgList.avatar" />
+			<div class="info">
+				<div class="name">{{ msgList.nickName }}</div>
+				<div class="status">在线 最后阅读时间：3小时前</div>
 			</div>
-		</div> -->
-
-		<!-- <div v-for="(item, index) in msgList.data" :key="index">
-			<div v-if="item.to" class="other message">
-				<el-avatar
-					:size="25"
-					:src="'http://127.0.0.1:9000/upload/' + msgList.avatar"
-				/>
-				<div style="text-align: left">{{ item.text }}</div>
-			</div>
-			<div v-else class="self message">
-				<el-avatar :size="25" :src="userinfo.avatar" />
-				<div style="text-align: right">{{ item.text }}</div>
-			</div>
-		</div> -->
-		<div v-for="(item, index) in msgList.data" :key="index">
-			<div v-if="item.to" class="other">
-				<div class="flex-ai">
-					<el-avatar
-						:src="'http://127.0.0.1:9000/upload/' + msgList.avatar"
-					/>
-					<div class="message" style="text-align: left">{{ item.text }}</div>
+		</div>
+		<div id="message-list">
+			<div v-for="(item, index) in msgList.data" :key="index">
+				<div v-if="item.to" class="other">
+					<div class="flex-ai">
+						<el-avatar
+							:src="'http://127.0.0.1:9000/upload/' + msgList.avatar"
+						/>
+						<div class="message" style="text-align: left">{{ item.text }}</div>
+					</div>
 				</div>
-			</div>
-			<div v-else class="self">
-				<div class="flex-ai flex_di">
-					<el-avatar :src="userinfo.avatar" />
-					<div class="message" style="text-align: right">{{ item.text }}</div>
+				<div v-else class="self">
+					<div class="flex-ai flex_di">
+						<el-avatar :src="userinfo.avatar" />
+						<div class="message" style="text-align: right">{{ item.text }}</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="footer">
-		<input @keydown.enter="enterSendmsg()" v-model="text_input" type="text" />
-		<button @click="clickToSend">send</button>
+		<div class="footer">
+			<input @keydown.enter="enterSendmsg()" v-model="text_input" type="text" />
+			<button @click="clickToSend">send</button>
+			<!-- <MsgInput @publicMsg="sendMessage" /> -->
+		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed, nextTick } from 'vue'
+import MsgInput from '../components/MsgInput.vue'
+import { ref, onMounted, computed, nextTick, watch } from 'vue'
 // import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
 const emit = defineEmits(['privateMsg', 'pushSelfMsg'])
 const props = defineProps({
+	inPrivateChat: Boolean,
 	msgList: Array,
 })
 // const route = useRoute()
@@ -70,6 +59,13 @@ const text_input = ref('')
 const userinfo = computed(() => {
 	return store.state.userinfo
 })
+
+watch(
+	() => props.inPrivateChat,
+	(newVal, oldVal) => {
+		console.log(`myProp changed from ${oldVal} to ${newVal}`)
+	}
+)
 
 function clickToSend() {
 	let msg = {
@@ -115,6 +111,7 @@ onMounted(() => {
 	// console.log(route.query.data)
 	// console.log(id)
 	console.log(props.msgList)
+	console.log(props.inPrivateChat)
 })
 </script>
 
@@ -179,5 +176,28 @@ onMounted(() => {
 }
 .other {
 	cursor: pointer;
+}
+
+input {
+	width: 80%;
+	padding: 8px 14px;
+	border: 1px solid hsl(280deg, 50%, 50%);
+	border-radius: 4px;
+	outline: none;
+	background: hsl(280deg, 50%, 30%, 0.2);
+	color: white;
+	margin-right: 10px;
+}
+
+button {
+	border: none;
+	background: linear-gradient(
+		90deg,
+		hsl(240deg, 50%, 50%),
+		hsl(280deg, 50%, 50%)
+	);
+	padding: 1em 2em;
+	border-radius: 4px;
+	color: white;
 }
 </style>

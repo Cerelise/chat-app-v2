@@ -24,7 +24,7 @@
 					<div class="text">切换账号</div>
 					<div class="sign">></div>
 				</div>
-				<div class="op-item">
+				<div @click="userLogout" class="op-item">
 					<div class="text">退出登录</div>
 					<div class="sign">></div>
 				</div>
@@ -49,24 +49,22 @@
 	</div>
 </template>
 
-<script>
-import Options from '../components/Options.vue'
+<script setup>
+import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-export default {
-	components: {
-		Options,
-	},
-	setup() {
-		const route = useRouter()
+import { ElNotification } from 'element-plus'
 
-		function userLogout() {
-			route.replace({ name: 'Login' })
-		}
+const store = useStore()
+const router = useRouter()
 
-		return {
-			userLogout: userLogout,
-		}
-	},
+function userLogout() {
+	store.dispatch('userLogout')
+	ElNotification({
+		title: 'Success',
+		message: '登出成功',
+		type: 'success',
+	})
+	router.push({ name: 'Login' })
 }
 </script>
 
@@ -95,12 +93,48 @@ export default {
 	justify-content: space-between;
 	margin: 15px 0 5px 0;
 	padding: 10px 30px 10px 30px;
-	border: 1px solid #fff;
-	border-radius: 15px;
+	background: transparent;
+	border: none;
+	color: #ffedd3;
+	position: relative;
+	transition: 0.5s ease;
 }
 
-.op-item:hover {
+.op-item::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 2px;
+	width: 0;
 	background-color: hsl(280deg, 100%, 70%);
+	transition: 0.5s ease;
+}
+.op-item:hover {
+	color: #1e1e2b;
+	transition-delay: 0.5s;
+}
+
+.op-item:hover::before {
+	width: 100%;
+}
+
+.op-item::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 0;
+	width: 100%;
+	background-color: hsl(280deg, 100%, 70%);
+	transition: 0.4s ease;
+	z-index: -1;
+}
+
+.op-item:hover::after {
+	height: 100%;
+	transition-delay: 0.4s;
+	color: aliceblue;
 }
 
 .about {

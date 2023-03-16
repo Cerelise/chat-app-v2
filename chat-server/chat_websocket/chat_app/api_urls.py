@@ -3,7 +3,6 @@ from chat_app import api_views
 
 urlpatterns = [
     path('dchat-login/', api_views.dchat_login),
-    # path('userinfo/', api_views.userinfo),
     # path('dchat-register/', api_views.dchat_register),
     path('dchat-logout/', api_views.dchat_logout),
     # path('dchat-resetPwd/', api_views.dchat_reset_pwd),

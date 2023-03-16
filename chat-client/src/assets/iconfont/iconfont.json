@@ -6,6 +6,62 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "55448",
+      "name": "voice_fill",
+      "font_class": "voicefill",
+      "unicode": "e6f0",
+      "unicode_decimal": 59120
+    },
+    {
+      "icon_id": "929751",
+      "name": "send",
+      "font_class": "send",
+      "unicode": "e7f7",
+      "unicode_decimal": 59383
+    },
+    {
+      "icon_id": "1312379",
+      "name": "icon_emoji",
+      "font_class": "icon_emoji",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "1567478",
+      "name": "clip",
+      "font_class": "clip",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "3525722",
+      "name": "emoji_line (61)",
+      "font_class": "emoji_line",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "15188343",
+      "name": "emoji-happy",
+      "font_class": "emoji-happy",
+      "unicode": "e6e2",
+      "unicode_decimal": 59106
+    },
+    {
+      "icon_id": "16618094",
+      "name": "voice",
+      "font_class": "voice",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
+      "icon_id": "16618107",
+      "name": "voice_close",
+      "font_class": "voice_close",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
       "icon_id": "7141689",
       "name": "github",
       "font_class": "github",

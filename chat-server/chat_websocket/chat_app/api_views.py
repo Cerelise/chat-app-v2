@@ -71,7 +71,13 @@ class Userinfo_view(APIView):
             user_item = {
                 "nickName": user.nickName,
                 "avatar": HostUrl + str(user.avatar),
+                "area": user.area,
                 "description": user.description,
+                "github": user.github,
+                "socialSite": user.socialSite,
+                "phone": user.phone,
+                "email": user.email,
+                "website": user.website,
             }
             userinfo_data.append(user_item)
 

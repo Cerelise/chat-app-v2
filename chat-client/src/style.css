@@ -5,7 +5,7 @@
 }
 
 body {
-	background-color: #262335;
+	background-color: #17212b;
 	opacity: 1;
 	/* background-image: radial-gradient(
 		#212943 0.6000000000000001px,
@@ -26,11 +26,23 @@ h2 {
 }
 
 /* 聊天公共页样式 */
-.chatPage {
+.rightpage {
   height: 100vh;
 	grid-area: main;
-	display: grid;
-	grid-template-rows: 2fr 10fr 1fr;
+}
+
+.defaultpage{
+  width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.chatpage{
+  min-height: 739px;
+  display: grid;
+	grid-template-rows: 3fr 14fr 2fr;
 	grid-template-areas:
 		'header'
 		'message-list'
@@ -40,7 +52,7 @@ h2 {
 
 .header {
   grid-area: header;
-	/* background: #fff; */
+	/* background: #17212b; */
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -105,47 +117,15 @@ h2 {
 	word-break: break-all;
 }
 
-/* .nickname{
-  text-align: left;
-}
-
-
-.msgtext {
-	text-align: left;
-}
-
-.other .el-avatar{
-  float: left!important;
-}
-
-.self{
-  background: #4f9dde;
-}
-
-.self .el-avatar{
-  float: right!important;
-}
-
-
-.self .nickname{
-  text-align: right;
-}
-
-
-.self .msgtext {
-	text-align: right;
-} */
-
 
 .footer {
   grid-area: footer;
-	background: #fbfafa;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-.footer input {
+/* .footer input {
 	width: 80%;
 	padding: 8px 14px;
 	border: 1px solid hsl(280deg, 50%, 50%);
@@ -164,11 +144,9 @@ h2 {
 		hsl(280deg, 50%, 50%)
 	);
 	padding: 1em 2em;
-	/* margin-top: 24px;
-	margin-right: 12px; */
 	border-radius: 4px;
 	color: white;
-}
+} */
 
 .itemList_ro_t {
 	grid-area: div;
@@ -250,4 +228,9 @@ h2 {
 
 .search-area {
 	margin: 20px 10px;
+}
+
+/* element-plus */
+.el-drawer.rtl{
+  background-color: #262335!important;
 }

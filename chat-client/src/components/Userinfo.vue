@@ -34,15 +34,21 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import TheIcon from './TheIcon.vue'
 
 const store = useStore()
 
+// const emit = defineEmits(['changeSetUI'])
+
 const userinfo = computed(function () {
 	return store.state.userinfo
 })
+
+// onMounted(() => {
+// 	emit('changeSetUI', true)
+// })
 </script>
 
 <style scoped>
@@ -55,6 +61,7 @@ const userinfo = computed(function () {
 		'footer';
 	justify-content: center;
 	justify-items: center;
+	padding: 0 10px;
 }
 
 header {
