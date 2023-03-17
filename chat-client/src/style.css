@@ -40,24 +40,24 @@ h2 {
 }
 
 .chatpage{
-  min-height: 739px;
+  height: 100vh;
   display: grid;
-	grid-template-rows: 3fr 14fr 2fr;
+	grid-template-rows: 1.5fr 14fr 1.5fr;
 	grid-template-areas:
 		'header'
 		'message-list'
 		'footer';
-	border: 1px solid #fff;
+	/* border: 1px solid #fff; */
 }
 
 .header {
   grid-area: header;
 	/* background: #17212b; */
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-	border: 1px solid #fff;
+  flex-direction: column;
+  justify-content: center;
 	color: #fff;
+  padding: 15px;
 }
 
 .userinfo{
@@ -109,9 +109,9 @@ h2 {
 	background: #ffffff;
 	text-align: center;
   margin: 5px 5px 5px 5px ;
-	padding: 5px;
+	padding: 10px 8px;
 	border-radius: 10px;
-	font-size: 18px;
+	font-size: 20px;
 	font-weight: 700;
 	color: #00000080;
 	word-break: break-all;
@@ -206,20 +206,24 @@ h2 {
 
 /* 字體設置 */
 .f-large{
-  font-size: 25px;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .f-mid{
   font-size: 20px;
   color: #babbc1;
-  /* text-align: center; */
-  /* font-weight: 700; */
 }
 
 .f-small{
   font-size: 15px;
   font-weight: 700;
-  /* text-align: center; */
+}
+
+.f-sub{
+  font-size: 20px;
+  margin-top: 5px; 
+  color: #708499;
 }
 
 /* .f-gray{

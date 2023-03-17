@@ -15,10 +15,6 @@
 				</template>
 			</el-dropdown>
 		</div>
-		<div class="other">
-			<span>创建会话</span>
-			<el-button type="primary" size="small" circle>+</el-button>
-		</div>
 	</div>
 </template>
 
@@ -32,8 +28,8 @@ defineProps(['type', 'option1', 'option2'])
 
 <style scoped>
 .operation-box {
-	display: grid;
-	grid-template-columns: 2fr 1fr;
+	display: flex;
+	justify-content: space-between;
 	align-items: center;
 }
 
@@ -46,11 +42,6 @@ defineProps(['type', 'option1', 'option2'])
 	margin-left: 10px;
 	display: flex;
 	align-items: center;
-}
-
-.other .el-button {
-	font-size: 18px;
-	font-weight: 700;
 }
 
 /* .el-dropdown-link .el-tooltip__trigger .el-tooltip__trigger {

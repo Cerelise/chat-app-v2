@@ -65,24 +65,23 @@
 		</div>
 		<main class="rightpage">
 			<router-view
-				@privateMsg="sendMessage"
-				@pushSelfMsg="pushSelfMsg"
 				:msgList="privateList"
 				:inPrivateChat="inOtherChat"
 			></router-view>
 			<template v-if="$route.path == '/'">
 				<div class="chatpage">
 					<div class="header">
-						<h2>{{ title }}</h2>
-						<div class="userinfo">
+						<div class="f-large">Cereliseの自留地</div>
+						<div class="f-sub">{{ userList.length }}位成员</div>
+						<!-- <div class="userinfo">
 							<span>当前用户：</span>
 							<img :src="userinfo.avatar" alt="" />
 							<span>{{ userinfo.nickName }}</span>
-							<!-- {{ store.state.token }} -->
-						</div>
+						</div> -->
 					</div>
 					<div id="message-list">
 						<div
+							style="margin: 10px 0"
 							v-for="(item, index) in msgList"
 							:key="index"
 							:class="{
@@ -95,6 +94,7 @@
 								:class="{ flex_di: userinfo.nickName == item.nickName }"
 							>
 								<el-avatar
+									:size="60"
 									v-if="userinfo.nickName != item.nickName"
 									:src="'http://127.0.0.1:9000/upload/' + item.avatar"
 									alt=""
@@ -102,6 +102,7 @@
 								/>
 								<el-avatar
 									v-else
+									:size="60"
 									:src="'http://127.0.0.1:9000/upload/' + item.avatar"
 									alt=""
 								/>
@@ -112,12 +113,6 @@
 						</div>
 					</div>
 					<div class="footer">
-						<!-- <input
-							@keydown.enter="enterSendmsg()"
-							v-model="text_input"
-							type="text"
-						/>
-						<button @click="clickToSend">send</button> -->
 						<MsgInput @publicMsg="sendMessage" />
 					</div>
 				</div>
@@ -164,7 +159,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed, nextTick } from 'vue'
+import { ref, reactive, onMounted, computed, nextTick, provide } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
 import { useRouter, useRoute } from 'vue-router'
@@ -183,7 +178,6 @@ const router = useRouter()
 const title = ref('')
 const websocket = ref('')
 const userList = ref([])
-const text_input = ref('')
 const msgList = reactive([])
 const singleUser = ref()
 const privateList = reactive({
@@ -206,11 +200,6 @@ const userinfoWidth = computed(() =>
 
 const userinfo = computed(() => {
 	return store.state.userinfo
-})
-// console.log(userinfo.value.id)
-
-const token = computed(() => {
-	return store.state.token
 })
 
 // 获取用户列表
@@ -255,7 +244,6 @@ function openOtherChat(data) {
 	privateList.from = data.from
 	inOtherChat.value = true
 
-	// privateList.data = []
 	router.push({
 		name: 'Chat',
 	})
@@ -278,48 +266,11 @@ function openOtherChat(data) {
 function pushSelfMsg(text) {
 	privateList.data.push(text)
 }
+provide('pushSelfMsg', pushSelfMsg)
 
 // 自动登录
 function autoLogin() {
 	store.dispatch('tryAutoLogin', localStorage.getItem('token'))
-}
-
-// 快捷发送
-function enterSendmsg() {
-	// console.log(e)
-	// console.log(websocket.value)
-	// if (websocket.readyState == 3) {
-	// 	initWebSocket()
-	// 	return
-	// }
-	let msg = {
-		code: 200,
-		content: {
-			token: localStorage.getItem('token'),
-			data: {
-				text: text_input.value,
-			},
-		},
-	}
-	sendMessage(msg)
-	text_input.value = ''
-}
-
-// 点击发送
-function clickToSend() {
-	console.log(text_input.value)
-	// msgList.push(text_input.value)
-	let msg = {
-		code: 200,
-		content: {
-			token: localStorage.getItem('token'),
-			data: {
-				text: text_input.value,
-			},
-		},
-	}
-	sendMessage(msg)
-	text_input.value = ''
 }
 
 // 初始化websocket
@@ -413,6 +364,7 @@ function sendMessage(msg) {
 	let text_data = JSON.stringify(msg)
 	websocket.value.send(text_data)
 }
+provide('sendMessage', sendMessage)
 
 // 报错
 function onError() {}
@@ -429,9 +381,7 @@ function onClose(e) {
 }
 
 onMounted(() => {
-	// autoLogin()
 	getUserList()
-	console.log(userList)
 	getData()
 	if (localStorage.getItem('token')) {
 		initWebSocket()

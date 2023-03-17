@@ -1,5 +1,5 @@
 <template>
-	<div v-if="inPrivateChat === false" class="defaultpage">
+	<div v-if="!msgList.nickName" class="defaultpage">
 		<img
 			style="height: 200px; object-fit: cover; object-position: center"
 			src="../assets/bg-pic/undraw_chat.svg"
@@ -33,20 +33,26 @@
 			</div>
 		</div>
 		<div class="footer">
-			<input @keydown.enter="enterSendmsg()" v-model="text_input" type="text" />
-			<button @click="clickToSend">send</button>
-			<!-- <MsgInput @publicMsg="sendMessage" /> -->
+			<!-- <input @keydown.enter="enterSendmsg()" v-model="text_input" type="text" />
+			<button @click="clickToSend">send</button> -->
+			<MsgInput
+				@publicMsg="sendMessage"
+				@privateMsg="sendMessage"
+				@pushSelfMsg="pushSelfMsg"
+				:msgList="msgList"
+				:inPrivateChat="inPrivateChat"
+			/>
 		</div>
 	</div>
 </template>
 
 <script setup>
 import MsgInput from '../components/MsgInput.vue'
-import { ref, onMounted, computed, nextTick, watch } from 'vue'
+import { ref, onMounted, computed, nextTick, watch, inject } from 'vue'
 // import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
-const emit = defineEmits(['privateMsg', 'pushSelfMsg'])
+// const emit = defineEmits(['privateMsg', 'pushSelfMsg'])
 const props = defineProps({
 	inPrivateChat: Boolean,
 	msgList: Array,
@@ -59,6 +65,8 @@ const text_input = ref('')
 const userinfo = computed(() => {
 	return store.state.userinfo
 })
+const sendMessage = inject('sendMessage')
+const pushSelfMsg = inject('pushSelfMsg')
 
 watch(
 	() => props.inPrivateChat,
@@ -67,51 +75,11 @@ watch(
 	}
 )
 
-function clickToSend() {
-	let msg = {
-		code: 201,
-		content: {
-			token: localStorage.getItem('token'),
-			data: {
-				to: props.msgList.id,
-				text: text_input.value,
-			},
-		},
-	}
-	emit('privateMsg', msg)
-	text_input.value = ''
-	// console.log(route.query)
-}
-
-function enterSendmsg() {
-	let msg = {
-		code: 201,
-		content: {
-			token: localStorage.getItem('token'),
-			data: {
-				to: props.msgList.id,
-				text: text_input.value,
-			},
-		},
-	}
-	emit('privateMsg', msg)
-	emit('pushSelfMsg', { text: text_input.value })
-
-	// 操作dom使滚轴自动滚动至最新消息
-	let list_dom = document.getElementById('message-list')
-	nextTick(() => {
-		list_dom.scrollTop = list_dom.scrollHeight
-	})
-
-	text_input.value = ''
-}
-
 onMounted(() => {
 	// console.log(route.query)
 	// console.log(route.query.data)
 	// console.log(id)
 	console.log(props.msgList)
-	console.log(props.inPrivateChat)
 })
 </script>
 
@@ -120,7 +88,7 @@ onMounted(() => {
 	display: flex;
 	align-items: center;
 	padding: 15px;
-	border: 1px solid #fff;
+	/* border: 1px solid #fff; */
 	color: #fff;
 }
 
@@ -131,6 +99,7 @@ onMounted(() => {
 }
 
 #message-list {
+	max-height: 73vh;
 	padding: 10px;
 	overflow-y: scroll;
 }

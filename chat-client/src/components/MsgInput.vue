@@ -4,7 +4,15 @@
 			<TheIcon class="box" icon="icon-clip" :sizes="22" />
 		</div>
 		<input
+			v-if="!inPrivateChat"
 			@keydown.enter="enterSendmsg()"
+			v-model="text_input"
+			type="text"
+			placeholder="输入消息..."
+		/>
+		<input
+			v-else
+			@keydown.enter="PChatEnterSend()"
 			v-model="text_input"
 			type="text"
 			placeholder="输入消息..."
@@ -28,8 +36,12 @@
 import TheIcon from './TheIcon.vue'
 import { ref } from 'vue'
 
+const props = defineProps({
+	inPrivateChat: Boolean,
+	msgList: Array,
+})
+const emit = defineEmits(['publicMsg', 'privateMsg', 'pushSelfMsg'])
 const text_input = ref('')
-const emit = defineEmits(['publicMsg'])
 
 function clickToSend() {
 	console.log(text_input.value)
@@ -50,7 +62,6 @@ function clickToSend() {
 
 function enterSendmsg() {
 	// console.log(e)
-	// console.log(websocket.value)
 	// if (websocket.readyState == 3) {
 	// 	initWebSocket()
 	// 	return
@@ -65,6 +76,40 @@ function enterSendmsg() {
 		},
 	}
 	emit('publicMsg', msg)
+	text_input.value = ''
+}
+
+function PChatClickSend() {
+	let msg = {
+		code: 201,
+		content: {
+			token: localStorage.getItem('token'),
+			data: {
+				to: props.msgList.id,
+				text: text_input.value,
+			},
+		},
+	}
+	emit('privateMsg', msg)
+	text_input.value = ''
+	// console.log(route.query)
+}
+
+function PChatEnterSend() {
+	// console.log(props.msgList)
+	let msg = {
+		code: 201,
+		content: {
+			token: localStorage.getItem('token'),
+			data: {
+				to: props.msgList.id,
+				text: text_input.value,
+			},
+		},
+	}
+	console.log(msg)
+  emit('privateMsg', msg)
+	emit('pushSelfMsg', { text: text_input.value })
 	text_input.value = ''
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<router-link :to="to" class="flex-ac-jsb">
-			<TheIcon class="box" :icon="icon" :sizes="22" />
+			<TheIcon class="box" :icon="icon" :sizes="size" />
 		</router-link>
 	</div>
 </template>
@@ -13,7 +13,10 @@ import TheIcon from './TheIcon.vue'
 defineProps({
 	to: String,
 	icon: String,
-	// unreadList: Object,
+	size: {
+		type: Number,
+		default: 24,
+	},
 })
 </script>
 

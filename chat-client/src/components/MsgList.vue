@@ -9,32 +9,36 @@
 		<div class="msgList">
 			<MsgCard
 				v-for="(item, index) in unreadList"
+				:class="{ bg: index == currentIndex }"
 				@click="openChat(index)"
 				:name="item.nickName"
 				:avatar="item.avatar"
 				:msg="item.data[item.data.length - 1].text"
-				:unread="item.data.length"
+				:unread="item.data.filter((obj) => obj.hasOwnProperty('to')).length"
+				:removeUnread="removeUnread"
 			/>
+			{{ unreadList }}
 		</div>
 	</div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import Options from './Options.vue'
 import Search from './Search.vue'
 import MsgCard from './MsgCard.vue'
 // 未读消息
 const emit = defineEmits(['currentChat'])
-
+const currentIndex = ref(-1)
+const removeUnread = ref(false)
 const props = defineProps({
 	unreadList: Array,
 	otherChatData: Array,
 })
 
 function openChat(index) {
-	console.log(props.unreadList)
-	console.log('-------------')
-	console.log(props.otherChatData)
+	removeUnread.value = true
+	currentIndex.value = index
 	emit('currentChat', props.unreadList[index])
 
 	// props.unreadList.forEach((obj, index) => {

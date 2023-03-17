@@ -1,7 +1,7 @@
 <template>
 	<div class="flex page">
 		<img class="bg" src="http://127.0.0.1:9000/upload/avatar.png" alt="" />
-		<div class="login">
+		<div class="reset-pwd">
 			<div class="flex">
 				<h1>Cerelise's Channels</h1>
 			</div>
@@ -16,16 +16,20 @@
 					placeholder="密码"
 					:show-password="true"
 				/>
-				<div class="flex flex-jc-fe" style="margin-top: 10px">
-					<router-link to="/reset-pwd" class="forgetPwd Link"
-						>忘记密码?</router-link
-					>
-				</div>
+			</div>
+			<div class="inputBox">
+				<el-input
+					v-model="user.repassword"
+					class="input"
+					type="password"
+					placeholder="重复密码"
+					:show-password="true"
+				/>
 			</div>
 
 			<div class="flex-jc-sb inputBox">
-				<button @click="toRegister" class="flex loginButton">注册</button>
-				<button @click="userLogin" class="flex loginButton">登录</button>
+				<button @click="resetPwd" class="flex reg-button">确认</button>
+				<button @click="toLogin" class="flex reg-button">返回登录</button>
 			</div>
 		</div>
 	</div>
@@ -41,53 +45,69 @@ import { ElNotification } from 'element-plus'
 const user = reactive({
 	username: '',
 	password: '',
+	repassword: '',
 })
 const store = useStore()
 const router = useRouter()
 
-function toRegister() {
-	router.push({ name: 'Register' })
+function toLogin() {
+	router.push({ name: 'Login' })
 }
 
-// function toResetPwd() {
-// 	router.push({ name: 'ResetPwd' })
-// }
-
-function userLogin() {
+function resetPwd() {
+	if (
+		user.username.length == 0 ||
+		user.password.length == 0 ||
+		user.repassword.length == 0
+	) {
+		ElNotification({
+			title: '错误',
+			message: '表单未填写完整！',
+			type: 'error',
+		})
+		return
+	}
+	if (user.password.length < 8) {
+		ElNotification({
+			title: '错误',
+			message: '密码太短！',
+			type: 'error',
+		})
+	}
+	if (user.password != user.repassword) {
+		ElNotification({
+			title: '错误',
+			message: '两次密码不一致！',
+			type: 'error',
+		})
+	}
 	// console.log(user)
 	axios({
 		method: 'post',
-		url: 'http://127.0.0.1:9000/api-chat/dchat-login/',
+		url: 'http://127.0.0.1:9000/api-chat/dchat-resetPwd/',
 		data: Qs.stringify({
 			username: user.username,
 			password: user.password,
+			repassword: user.repassword,
 		}),
 	}).then((res) => {
-		console.log(res.data) // token
-		if (res.data == 'user none') {
+		console.log(res.data)
+		if (res.data == 'user is not exist') {
 			ElNotification({
 				title: '错误',
-				message: '用户名不存在！',
+				message: '用户不存在！',
 				type: 'error',
 			})
 			return
-		}
-		if (res.data == 'pwd arr') {
+		} else {
+			store.commit('saveUserinfo', res.data)
 			ElNotification({
-				title: '错误',
-				message: '密码错误！',
-				type: 'error',
+				title: '成功',
+				message: '密码修改成功！',
+				type: 'success',
 			})
-			return
+			router.push({ name: 'Login' })
 		}
-		localStorage.setItem('token', res.data)
-		store.commit('setToken', res.data)
-		ElNotification({
-			title: '成功',
-			message: '登录成功',
-			type: 'success',
-		})
-		router.push({ name: 'Homepage' })
 	})
 }
 </script>
@@ -109,7 +129,7 @@ function userLogin() {
 	background: #e0e0e0;
 	box-shadow: 50px -50px 100px #34495e, -50px 50px 100px #34495e;
 }
-.login {
+.reset-pwd {
 	padding: 60px;
 	min-height: 30vh;
 	min-width: 30vw;
@@ -117,12 +137,6 @@ function userLogin() {
 	border-radius: 15px;
 	background: #e0e0e060;
 	box-shadow: 50px 50px 100px #34495e, -50px -50px 100px #34495e;
-}
-.forgetPwd {
-	color: #6bb4f1;
-}
-.forgetPwd:hover {
-	color: #2d4d66;
 }
 
 .inputBox {
@@ -134,7 +148,7 @@ function userLogin() {
 	height: 50px;
 }
 
-.loginButton {
+.reg-button {
 	width: 200px;
 	height: 50px;
 	font-size: 22px;

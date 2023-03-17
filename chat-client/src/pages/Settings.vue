@@ -70,7 +70,7 @@ function userLogout() {
 
 <style scoped>
 .settings {
-	min-height: 730px;
+	height: 100vh;
 	padding: 20px 30px;
 	display: grid;
 	grid-template-areas:

@@ -12,7 +12,7 @@
 			<div class="p-time">09:23</div>
 			<div class="p-status">在线</div>
 
-			<div v-if="unread" class="flex-ac-jsb p-msg">
+			<div v-if="!removeUnread" class="flex-ac-jsb p-msg">
 				<p>{{ msg }}</p>
 				<div class="unread">{{ unread }}</div>
 			</div>
@@ -25,7 +25,7 @@
 
 <script setup>
 // import { onMounted } from 'vue'
-const props = defineProps(['name', 'avatar', 'msg', 'unread'])
+const props = defineProps(['name', 'avatar', 'msg', 'unread', 'removeUnread'])
 // const emit = defineEmits(['changeSetUI'])
 
 // onMounted(() => {
@@ -38,14 +38,18 @@ const props = defineProps(['name', 'avatar', 'msg', 'unread'])
 	margin: 10px;
 	padding: 20px 20px;
 	position: relative;
-	background: linear-gradient(to right, #4a00e0, #8e2de2);
+
 	overflow: hidden;
 	border: none;
 	border-radius: 6px;
 	box-shadow: 0 18px 40px 0 rgba(204, 102, 255, 0.2);
 }
+.bg {
+	background: linear-gradient(to right, #4a00e0, #8e2de2);
+	/* background: red; */
+}
 
-.msg-card::before,
+/* .msg-card::before,
 .msg-card::after {
 	position: absolute;
 	top: 0;
@@ -60,7 +64,7 @@ const props = defineProps(['name', 'avatar', 'msg', 'unread'])
 	background: #1c1e27;
 	width: 120%;
 	left: -10%;
-	/* transform: skew(30deg); */
+	transform: skew(30deg);
 	transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
 }
 
@@ -71,7 +75,7 @@ const props = defineProps(['name', 'avatar', 'msg', 'unread'])
 .msg-card:active {
 	transform: scale(0.95);
 	color: #8e2de2;
-}
+} */
 
 .card-container {
 	position: relative;

@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from .models import Userinfo
 from .serializers import Userinfo_data
 
@@ -39,6 +39,48 @@ def dchat_logout(request):
     user_token = Token.objects.get(key=token)
     user_token.delete()
     return Response('logout')
+
+
+# 注册
+@api_view(['POST'])
+def dchat_register(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = User.objects.filter(username=username)
+    if user:
+        return Response('this user is exist')
+    else:
+        new_password = make_password(password, username)
+        new_user = User(username=username, password=new_password)
+        new_user.save()
+    token = Token.objects.get_or_create(user=new_user)
+    token = Token.objects.get(user=new_user)
+
+    userinfo = Userinfo.objects.get_or_create(nickName=username,
+                                              belong=new_user)
+    userinfo = Userinfo.objects.get(belong=new_user)
+
+    userinfo_data = {
+        'token': token.key,
+        'nickName': userinfo.nickName,
+        'avatar': HostUrl + "default/user.jpg"
+    }
+
+    return Response(userinfo_data)
+
+
+# 重置密码
+@api_view(['POST'])
+def dchat_reset_pwd(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = User.objects.filter(username=username)
+    if not user:
+        return Response('user is not exist')
+    else:
+        new_password = make_password(password, username)
+        User.objects.filter(username=username).update(password=new_password)
+    return Response('ok')
 
 
 @api_view(['POST'])

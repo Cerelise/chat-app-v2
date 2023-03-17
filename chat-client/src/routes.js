@@ -10,7 +10,6 @@ const routes = [
 		components: {
 			default: () => import('./pages/Homepage.vue'),
 		},
-		// component: Homepage,
 		name: 'Homepage',
 		children: [
 			{
@@ -24,7 +23,7 @@ const routes = [
 				path: 'chat',
 				name: 'Chat',
 				components: {
-					userchat: () => import('./components/UserList.vue'),
+					userchat: () => import('./components/MsgList.vue'),
 					default: () => import('./pages/PrivateChat.vue'),
 				},
 				// props: (route) => ({
@@ -54,6 +53,16 @@ const routes = [
 		path: '/login',
 		name: 'Login',
 		component: () => import('./pages/Login.vue'),
+	},
+	{
+		path: '/register',
+		name: 'Register',
+		component: () => import('./pages/Register.vue'),
+	},
+	{
+		path: '/reset-pwd',
+		name: 'ResetPwd',
+		component: () => import('./pages/ResetPwd.vue'),
 	},
 	// {
 	// 	component: '/register',

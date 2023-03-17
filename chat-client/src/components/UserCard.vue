@@ -42,8 +42,6 @@ const props = defineProps(['name', 'avatar', 'desc'])
 		'avatar status status'
 		'desc desc desc';
 	grid-template-columns: 64px 1fr 1fr;
-	/* grid-template-rows: 1fr 1fr 1fr; */
-
 	align-items: center;
 	row-gap: 5px;
 }
@@ -60,7 +58,7 @@ const props = defineProps(['name', 'avatar', 'desc'])
 
 .msg-card::before {
 	content: '';
-	background: #1c1e27;
+	background: #0e1621;
 	width: 120%;
 	left: -10%;
 	/* transform: skew(30deg); */
