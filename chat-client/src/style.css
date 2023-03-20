@@ -167,6 +167,10 @@ h2 {
   align-items: center;
 }
 
+.flex-jc-fs{
+  justify-content: flex-start;
+}
+
 .flex-jc-fe{
   justify-content: flex-end;
 }
@@ -196,6 +200,10 @@ h2 {
 
 .flex_di {
 	flex-direction: row-reverse;
+}
+
+.flex-fd-col{
+  flex-direction: column;
 }
 
 

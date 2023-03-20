@@ -8,7 +8,7 @@
 				<h2>账号设置</h2>
 				<div>
 					<div class="op-item">
-						<div class="text">修改个人信息</div>
+						<div @click="Editpage" class="text">修改个人信息</div>
 						<div class="sign">></div>
 					</div>
 					<div class="op-item">
@@ -24,8 +24,8 @@
 					<div class="text">切换账号</div>
 					<div class="sign">></div>
 				</div>
-				<div @click="userLogout" class="op-item">
-					<div class="text">退出登录</div>
+				<div class="op-item">
+					<div @click="userLogout" class="text">退出登录</div>
 					<div class="sign">></div>
 				</div>
 			</div>
@@ -53,9 +53,12 @@
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
+import { inject, onMounted } from 'vue'
 
 const store = useStore()
 const router = useRouter()
+
+const Editpage = inject('goEditpage')
 
 function userLogout() {
 	store.dispatch('userLogout')
@@ -66,6 +69,10 @@ function userLogout() {
 	})
 	router.push({ name: 'Login' })
 }
+
+onMounted(() => {
+	// Editpage()
+})
 </script>
 
 <style scoped>
@@ -98,6 +105,7 @@ function userLogout() {
 	color: #ffedd3;
 	position: relative;
 	transition: 0.5s ease;
+	cursor: pointer;
 }
 
 .op-item::before {

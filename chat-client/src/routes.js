@@ -65,6 +65,11 @@ const routes = [
 		component: () => import('./pages/ResetPwd.vue'),
 	},
 	// {
+	// 	path: '/profile-editing',
+	// 	name: 'ProfileEditing',
+	// 	component: () => import('./pages/ProfileEditing.vue'),
+	// },
+	// {
 	// 	component: '/register',
 	// 	name: Register,
 	// },

@@ -22,7 +22,9 @@ export default createStore({
 	},
 	mutations: {
 		saveUserinfo(state, userinfo) {
-			state.userinfo = userinfo
+      state.userinfo = userinfo
+      // state.userinfo.avatar = userinfo +'/upload/' +state.userinfo.avatar
+      console.log(state.userinfo);
 			// console.log(state.userinfo)
 		},
 		setToken(state, token) {
@@ -75,6 +77,22 @@ export default createStore({
 				// 清除vuex里的token
 				commit('clearToken')
 				localStorage.removeItem('token')
+			})
+		},
+		// 获取用户信息
+		getUserinfo({ commit }, token) {
+			console.log('---getUserinfo---')
+			console.log(token)
+			axios({
+				method: 'post',
+				url: HostURL + '/api-chat/userinfo/get/',
+				data: Qs.stringify({
+					token: token,
+				}),
+			}).then((res) => {
+				const result = res.data
+				commit('saveUserinfo', result)
+				console.log(result)
 			})
 		},
 	},

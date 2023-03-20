@@ -6,8 +6,20 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password, make_password
 from .models import Userinfo
 from .serializers import Userinfo_data
+import os
+import datetime
 
 HostUrl = 'http://127.0.0.1:9000/upload/'
+picUrl = 'http://127.0.0.1:9000'
+
+
+def CurrentUserId(token):
+    exists = Token.objects.filter(key=token).exists()
+    if exists:
+        id = Token.objects.filter(key=token).first().user_id
+    else:
+        id = 0
+    return id
 
 
 # 登录
@@ -84,13 +96,42 @@ def dchat_reset_pwd(request):
 
 
 @api_view(['POST'])
-def userinfo(request):
+def update_userinfo(request):
+    token = request.POST['token']
+    id = CurrentUserId(token)
+    nickName = request.POST['nickName']
+    avatar = request.POST['avatar']
+    area = request.POST['area']
+    phone = request.POST['phone']
+    email = request.POST['email']
+    website = request.POST['website']
+    desc = request.POST['desc']
+    User.objects.filter(id=id).update(username=nickName)
+    Userinfo.objects.filter(belong_id=id).update(area=area,
+                                                 nickName=nickName,
+                                                 description=desc,
+                                                 phone=phone,
+                                                 email=email,
+                                                 website=website)
+    return Response('ok')
+
+
+@api_view(['POST'])
+def user_info(request):
+    avatar = request.POST['avatar']
+    print(request.FILES)
+    print(type(avatar))
+    return Response('ok')
+
+
+@api_view(['POST'])
+def get_userinfo(request):
     token = request.POST['token']
     user = Token.objects.get(key=token).user
     userinfo = Userinfo.objects.get(belong=user)
     userinfo_data = {
         "nickName": userinfo.nickName,
-        "avatar": HostUrl + str(userinfo.avatar),
+        "avatar": HostUrl+str(userinfo.avatar),
         "area": userinfo.area,
         "description": userinfo.description,
         "github": userinfo.github,
@@ -98,38 +139,46 @@ def userinfo(request):
         "phone": userinfo.phone,
         "email": userinfo.email,
         "website": userinfo.website,
+        "id": userinfo.id
     }
-
-    # print(userinfo_data)
-
     return Response(userinfo_data)
 
 
 class Userinfo_view(APIView):
     def get(self, request, format=None):
         userinfo = Userinfo.objects.all()
-        userinfo_data = []
-        for user in userinfo:
-            user_item = {
-                "nickName": user.nickName,
-                "avatar": HostUrl + str(user.avatar),
-                "area": user.area,
-                "description": user.description,
-                "github": user.github,
-                "socialSite": user.socialSite,
-                "phone": user.phone,
-                "email": user.email,
-                "website": user.website,
-            }
-            userinfo_data.append(user_item)
-
+        userinfo_data = Userinfo_data(userinfo, many=True).data
+        for user in userinfo_data:
+            user['avatar'] = picUrl + user['avatar']
         return Response(userinfo_data)
         # return Response('userinfo-get')
+    def put(self, request, format=None):
+        token = request.POST['token']
+        id = CurrentUserId(token)
+
+        print(request.data)
+        nickName = request.POST['nickName']
+        area = request.POST['area']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        website = request.POST['website']
+        desc = request.POST['desc']
+        User.objects.filter(id=id).update(username=nickName)
+        Userinfo.objects.filter(belong_id=id).update(area=area,
+                                                     nickName=nickName,
+                                                     description=desc,
+                                                     phone=phone,
+                                                     email=email,
+                                                     website=website)
+        userinfo = Userinfo.objects.filter(belong_id=id).first()
+        print(request.FILES.get("avatar"))
+        if  request.FILES.get("avatar"):
+          userinfo.avatar = request.FILES.get("avatar")
+        userinfo.save()
+        return Response('ok')
 
     def post(self, request, format=None):
         token = request.POST['token']
-        # print('user token')
-        # print(token)
         if token:
             # 获取token列表
             token_data = Token.objects.filter(key=token)

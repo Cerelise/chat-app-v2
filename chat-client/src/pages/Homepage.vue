@@ -73,11 +73,6 @@
 					<div class="header">
 						<div class="f-large">Cereliseの自留地</div>
 						<div class="f-sub">{{ userList.length }}位成员</div>
-						<!-- <div class="userinfo">
-							<span>当前用户：</span>
-							<img :src="userinfo.avatar" alt="" />
-							<span>{{ userinfo.nickName }}</span>
-						</div> -->
 					</div>
 					<div id="message-list">
 						<div
@@ -120,6 +115,7 @@
 		</main>
 	</div>
 
+	<ProfileEditing :showBox="showEditBox" />
 	<el-drawer v-model="userinfoDrawer" direction="rtl" :size="userinfoWidth">
 		<div class="standard">
 			<div class="ui-header">
@@ -162,20 +158,20 @@
 import { ref, reactive, onMounted, computed, nextTick, provide } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import Search from '../components/Search.vue'
 import Options from '../components/Options.vue'
 import Navitem from '../components/NavItem.vue'
 import UserCard from '../components/UserCard.vue'
 import TheIcon from '../components/TheIcon.vue'
 import MsgInput from '../components/MsgInput.vue'
+import ProfileEditing from './ProfileEditing.vue'
 import { ElNotification } from 'element-plus'
 
 const store = useStore()
 const router = useRouter()
 // const route = useRoute()
 
-const title = ref('')
 const websocket = ref('')
 const userList = ref([])
 const msgList = reactive([])
@@ -193,6 +189,8 @@ const openSetting = ref(false)
 // 判断此时是否在聊天页面内
 const inOtherChat = ref(false)
 const userinfoDrawer = ref(false)
+// 修改个人信息
+const showEditBox = ref(false)
 
 const userinfoWidth = computed(() =>
 	document.body.clientWidth < 500 ? 300 : '30%'
@@ -201,6 +199,20 @@ const userinfoWidth = computed(() =>
 const userinfo = computed(() => {
 	return store.state.userinfo
 })
+provide('userinfoEdit', userinfo)
+
+// 修改个人信息
+function goEditpage() {
+	showEditBox.value = true
+	console.log(showEditBox.value)
+}
+provide('goEditpage', goEditpage)
+
+function leaveEditpage() {
+	showEditBox.value = false
+	console.log(showEditBox.value)
+}
+provide('leaveEditpage', leaveEditpage)
 
 // 获取用户列表
 function getUserList() {
@@ -216,17 +228,6 @@ function getUserList() {
 function openUserinfo(info) {
 	userinfoDrawer.value = true
 	singleUser.value = info
-}
-
-// 获取标题
-function getData() {
-	axios({
-		method: 'get',
-		url: 'http://127.0.0.1:9000/api/',
-	}).then((res) => {
-		// console.log(res)
-		title.value = res.data.title
-	})
 }
 
 // 控制列表页与设置页的切换
@@ -382,7 +383,6 @@ function onClose(e) {
 
 onMounted(() => {
 	getUserList()
-	getData()
 	if (localStorage.getItem('token')) {
 		initWebSocket()
 	}

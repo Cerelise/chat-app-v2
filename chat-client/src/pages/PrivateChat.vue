@@ -16,6 +16,7 @@
 		</div>
 		<div id="message-list">
 			<div v-for="(item, index) in msgList.data" :key="index">
+				<!-- {{ msgList }} -->
 				<div v-if="item.to" class="other">
 					<div class="flex-ai">
 						<el-avatar
@@ -59,8 +60,6 @@ const props = defineProps({
 })
 // const route = useRoute()
 const store = useStore()
-const text_input = ref('')
-// const message = ref('')
 
 const userinfo = computed(() => {
 	return store.state.userinfo
@@ -99,8 +98,9 @@ onMounted(() => {
 }
 
 #message-list {
-	max-height: 73vh;
+	max-height: 90vh;
 	padding: 10px;
+  background-color: #0e1621;
 	overflow-y: scroll;
 }
 
