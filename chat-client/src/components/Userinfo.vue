@@ -2,7 +2,14 @@
 	<div class="basic standard">
 		<header>
 			<div class="avatar">
-				<img :src="userinfo.avatar" alt="" />
+				<!-- <img :src="userinfo.avatar" alt="" /> -->
+				<el-image
+					:src="userinfo.avatar"
+					:zoom-rate="1.2"
+					:preview-src-list="[userinfo.avatar]"
+					:initial-index="4"
+					fit="cover"
+				/>
 				<el-button type="primary" size="large" circle
 					><i class="iconfont">&#xe82e;</i></el-button
 				>
@@ -34,7 +41,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 import TheIcon from './TheIcon.vue'
 
@@ -77,7 +84,7 @@ header {
 	position: relative;
 }
 
-img {
+.el-image {
 	width: 100px;
 	height: 100px;
 	border-radius: 100px;

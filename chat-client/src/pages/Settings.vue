@@ -12,7 +12,7 @@
 						<div class="sign">></div>
 					</div>
 					<div class="op-item">
-						<div class="text">修改密码</div>
+						<div @click="toResetPwd" class="text">修改密码</div>
 						<div class="sign">></div>
 					</div>
 				</div>
@@ -59,6 +59,10 @@ const store = useStore()
 const router = useRouter()
 
 const Editpage = inject('goEditpage')
+
+function toResetPwd() {
+	router.push({ name: 'ResetPwd' })
+}
 
 function userLogout() {
 	store.dispatch('userLogout')

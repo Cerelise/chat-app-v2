@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from chat_app.models import Userinfo
+# from rest_framework.authtoken.models import Token
 
 
 class Userinfo_data(serializers.ModelSerializer):

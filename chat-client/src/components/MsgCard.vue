@@ -44,10 +44,6 @@ const props = defineProps(['name', 'avatar', 'msg', 'unread', 'removeUnread'])
 	border-radius: 6px;
 	box-shadow: 0 18px 40px 0 rgba(204, 102, 255, 0.2);
 }
-.bg {
-	background: linear-gradient(to right, #4a00e0, #8e2de2);
-	/* background: red; */
-}
 
 /* .msg-card::before,
 .msg-card::after {

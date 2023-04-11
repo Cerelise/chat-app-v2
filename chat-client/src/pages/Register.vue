@@ -28,7 +28,7 @@
 			</div>
 
 			<div class="flex-jc-sb inputBox">
-				<button @click="userRegister" class="flex reg-button">注册</button>
+				<button @click="register" class="flex reg-button">注册</button>
 				<button @click="toLogin" class="flex reg-button">
 					已有账号？去登录
 				</button>
@@ -37,8 +37,9 @@
 	</div>
 </template>
 <script setup>
-import axios from 'axios'
-import Qs from 'qs'
+// import axios from 'axios'
+// import Qs from 'qs'
+import { userRegister } from '../api/apis'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -56,7 +57,63 @@ function toLogin() {
 	router.push({ name: 'Login' })
 }
 
-function userRegister() {
+// function userRegister() {
+// 	if (
+// 		user.username.length == 0 ||
+// 		user.password.length == 0 ||
+// 		user.repassword.length == 0
+// 	) {
+// 		ElNotification({
+// 			title: '错误',
+// 			message: '表单未填写完整！',
+// 			type: 'error',
+// 		})
+// 		return
+// 	}
+// 	if (user.password.length < 8) {
+// 		ElNotification({
+// 			title: '错误',
+// 			message: '密码太短！',
+// 			type: 'error',
+// 		})
+// 	}
+// 	if (user.password != user.repassword) {
+// 		ElNotification({
+// 			title: '错误',
+// 			message: '两次密码不一致！',
+// 			type: 'error',
+// 		})
+// 	}
+// 	// console.log(user)
+// 	axios({
+// 		method: 'post',
+// 		url: 'http://127.0.0.1:9000/api-chat/dchat-register/',
+// 		data: Qs.stringify({
+// 			username: user.username,
+// 			password: user.password,
+// 			repassword: user.repassword,
+// 		}),
+// 	}).then((res) => {
+// 		console.log(res.data)
+// 		if (res.data == 'this user is exist') {
+// 			ElNotification({
+// 				title: '错误',
+// 				message: '用户名已被注册！',
+// 				type: 'error',
+// 			})
+// 			return
+// 		}
+// 		store.commit('saveUserinfo', res.data)
+// 		ElNotification({
+// 			title: '成功',
+// 			message: '注册成功！将跳转至登录界面',
+// 			type: 'success',
+// 		})
+// 		router.push({ name: 'Login' })
+// 	})
+// }
+
+function register() {
 	if (
 		user.username.length == 0 ||
 		user.password.length == 0 ||
@@ -83,17 +140,12 @@ function userRegister() {
 			type: 'error',
 		})
 	}
-	// console.log(user)
-	axios({
-		method: 'post',
-		url: 'http://127.0.0.1:9000/api-chat/dchat-register/',
-		data: Qs.stringify({
-			username: user.username,
-			password: user.password,
-			repassword: user.repassword,
-		}),
-	}).then((res) => {
-		console.log(res.data)
+	const formData = new FormData()
+	formData.append('username', user.username)
+	formData.append('password', user.password)
+	formData.append('repassword', user.repassword)
+	userRegister(formData).then((res) => {
+		console.log(res)
 		if (res.data == 'this user is exist') {
 			ElNotification({
 				title: '错误',

@@ -1,13 +1,16 @@
 import { createLogger, createStore } from 'vuex'
 import axios from 'axios'
 import Qs from 'qs'
+// import { useRouter } from 'vue-router'
 
 const HostURL = 'http://127.0.0.1:9000'
+// const router = useRouter()
 
 export default createStore({
 	state: {
 		userinfo: {
 			avatar: null,
+			token: null,
 			nickName: null,
 			area: null,
 			description: null,
@@ -18,22 +21,22 @@ export default createStore({
 			website: null,
 			id: null,
 		},
-		token: null,
+		// token: null,
 	},
 	mutations: {
 		saveUserinfo(state, userinfo) {
-      state.userinfo = userinfo
-      // state.userinfo.avatar = userinfo +'/upload/' +state.userinfo.avatar
-      console.log(state.userinfo);
+			state.userinfo = userinfo
+			// state.userinfo.avatar = userinfo +'/upload/' +state.userinfo.avatar
+			console.log(state.userinfo)
 			// console.log(state.userinfo)
 		},
 		setToken(state, token) {
-			state.token = token
+			state.userinfo.token = token
 			// console.log(state.token)
 		},
 		// 清空用户登录状态
 		clearToken(state) {
-			state.token = ''
+			state.userinfo.token = ''
 		},
 	},
 	actions: {

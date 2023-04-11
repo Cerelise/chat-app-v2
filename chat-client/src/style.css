@@ -4,6 +4,10 @@
 	padding: 0;
 }
 
+html {
+	overflow: hidden;
+}
+
 body {
 	background-color: #17212b;
 	opacity: 1;
@@ -25,23 +29,28 @@ h2 {
 	color: hsl(280deg, 100%, 80%);
 }
 
+/* 左侧列表公共样式 */
+.bg {
+	background: linear-gradient(to right, #4a00e0, #8e2de2);
+}
+
 /* 聊天公共页样式 */
 .rightpage {
-  height: 100vh;
+	height: 100vh;
 	grid-area: main;
 }
 
-.defaultpage{
-  width: 100%;
+.defaultpage {
+	width: 100%;
 	height: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-.chatpage{
-  height: 100vh;
-  display: grid;
+.chatpage {
+	height: 100vh;
+	display: grid;
 	grid-template-rows: 1.5fr 14fr 1.5fr;
 	grid-template-areas:
 		'header'
@@ -51,64 +60,64 @@ h2 {
 }
 
 .header {
-  grid-area: header;
+	grid-area: header;
 	/* background: #17212b; */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	color: #fff;
-  padding: 15px;
+	padding: 15px;
 }
 
-.userinfo{
-  display: flex;
-  align-items: center;
-  padding: 10px;
+.userinfo {
+	display: flex;
+	align-items: center;
+	padding: 10px;
 }
 
-.userinfo img{
-  width:30px;
-  height: 30px;
-  border-radius: 15px;
+.userinfo img {
+	width: 30px;
+	height: 30px;
+	border-radius: 15px;
 }
 
-.chatbubble{
-  display: flex;
-  flex-direction: column;
+.chatbubble {
+	display: flex;
+	flex-direction: column;
 }
 
-.time{
-  margin: 6px;
-  margin-left: 24px;
-  word-spacing: 1rem;
+.time {
+	margin: 6px;
+	margin-left: 24px;
+	word-spacing: 1rem;
 }
 
-.bubble{
-  padding: 15px 22px;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
-  border-radius: 100px;
-  position: relative;
-  z-index: 10;
+.bubble {
+	padding: 15px 22px;
+	box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+	border-radius: 100px;
+	position: relative;
+	z-index: 10;
 }
 
-.bubbletip{
-  position: absolute;
-  bottom:-15%;
-  left: 0;
-  z-index: 5;
+.bubbletip {
+	position: absolute;
+	bottom: -15%;
+	left: 0;
+	z-index: 5;
 
-  /* other */
-  transform: rotateY(180deg);
-  left: unset;
-  right: 0;
+	/* other */
+	transform: rotateY(180deg);
+	left: unset;
+	right: 0;
 }
 
 .message {
-  /* min-width:10vw;
+	/* min-width:10vw;
   max-width: 20vw; */
 	background: #ffffff;
 	text-align: center;
-  margin: 5px 5px 5px 5px ;
+	margin: 5px 5px 5px 5px;
 	padding: 10px 8px;
 	border-radius: 10px;
 	font-size: 20px;
@@ -117,9 +126,8 @@ h2 {
 	word-break: break-all;
 }
 
-
 .footer {
-  grid-area: footer;
+	grid-area: footer;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -150,50 +158,54 @@ h2 {
 
 .itemList_ro_t {
 	grid-area: div;
-  overflow-y: scroll;
+	overflow-y: scroll;
 }
 
-.itemList_ro_f{
-  grid-area: div;
+.itemList_ro_f {
+	grid-area: div;
 }
-
 
 /* 佈局設置 */
+.flex-cm {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .flex {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  justify-items: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	justify-items: center;
+	align-items: center;
 }
 
-.flex-jc-fs{
-  justify-content: flex-start;
+.flex-jc-fs {
+	justify-content: flex-start;
 }
 
-.flex-jc-fe{
-  justify-content: flex-end;
+.flex-jc-fe {
+	justify-content: flex-end;
 }
 
-.flex-jc-sb{
-  display: flex;
-  justify-content: space-evenly;
+.flex-jc-sb {
+	display: flex;
+	justify-content: space-evenly;
 }
 
-
-.flex-ai{
-  display: flex;
-  align-items: center;
+.flex-ai {
+	display: flex;
+	align-items: center;
 }
 
-.flex-ac-jsb{
-  display: flex;
+.flex-ac-jsb {
+	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
 
-.flex-ac-jc{
-  display: flex;
+.flex-ac-jc {
+	display: flex;
 	justify-content: center;
 	align-items: center;
 }
@@ -202,36 +214,35 @@ h2 {
 	flex-direction: row-reverse;
 }
 
-.flex-fd-col{
-  flex-direction: column;
+.flex-fd-col {
+	flex-direction: column;
 }
 
-
 /* 间距设置 */
-.standard{
-  margin-bottom: 10px;
+.standard {
+	margin-bottom: 10px;
 }
 
 /* 字體設置 */
-.f-large{
-  font-size: 20px;
-  font-weight: 700;
+.f-large {
+	font-size: 20px;
+	font-weight: 700;
 }
 
-.f-mid{
-  font-size: 20px;
-  color: #babbc1;
+.f-mid {
+	font-size: 20px;
+	color: #babbc1;
 }
 
-.f-small{
-  font-size: 15px;
-  font-weight: 700;
+.f-small {
+	font-size: 15px;
+	font-weight: 700;
 }
 
-.f-sub{
-  font-size: 20px;
-  margin-top: 5px; 
-  color: #708499;
+.f-sub {
+	font-size: 20px;
+	margin-top: 5px;
+	color: #708499;
 }
 
 /* .f-gray{
@@ -243,6 +254,6 @@ h2 {
 }
 
 /* element-plus */
-.el-drawer.rtl{
-  background-color: #262335!important;
+.el-drawer.rtl {
+	background-color: #262335 !important;
 }

@@ -24,7 +24,7 @@
 				<div class="form">
 					<el-form :model="form" label-width="120px">
 						<el-form-item class="flex" label="用户名:">
-							<el-input class="input" v-model="form.nickName" />
+							<el-input class="input" v-model="form.nickName" disabled />
 						</el-form-item>
 						<el-form-item class="flex" label="地区:">
 							<el-input class="input" v-model="form.area" />
@@ -129,7 +129,6 @@ function beforeUpload(file) {
 async function onSubmit() {
 	const token = localStorage.getItem('token')
 	// let files = document.querySelector('.el-upload__input').files[0]
-	// console.log(files)
 	let formData = new FormData()
 	formData.append('token', token)
 	formData.append('nickName', form.nickName)
@@ -145,25 +144,6 @@ async function onSubmit() {
 		method: 'PUT',
 		body: formData,
 	}).then((res) => console.log(res))
-	// await axios.post('http://127.0.0.1:9000/api-chat/userinfo/test/', formData)
-	// await axios.post('http://127.0.0.1:9000/api-chat/userinfo/update/', formData)
-	// await axios({
-	// 	method: 'post',
-	// 	url: 'http://127.0.0.1:9000/api-chat/userinfo/update/',
-	// 	data: Qs.stringify({
-	// 		token: token,
-	// 		nickName: form.nickName,
-	// 		avatar: form.avatar,
-	// 		area: form.area,
-	// 		phone: form.phone,
-	// 		email: form.email,
-	// 		website: form.website,
-	// 		desc: form.desc,
-	// 	}),
-	// }).then((res) => {
-	// 	console.log(res.data)
-	// 	store.dispatch('getUserinfo', token)
-	// })
 	store.dispatch('getUserinfo', token)
 	console.log(form)
 	leaveEdit()

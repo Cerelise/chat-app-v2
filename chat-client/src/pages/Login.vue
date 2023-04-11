@@ -25,17 +25,16 @@
 
 			<div class="flex-jc-sb inputBox">
 				<button @click="toRegister" class="flex loginButton">注册</button>
-				<button @click="userLogin" class="flex loginButton">登录</button>
+				<button @click="login" class="flex loginButton">登录</button>
 			</div>
 		</div>
 	</div>
 </template>
 <script setup>
-import axios from 'axios'
-import Qs from 'qs'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { userLogin } from '../api/apis'
 import { ElNotification } from 'element-plus'
 
 const user = reactive({
@@ -49,22 +48,13 @@ function toRegister() {
 	router.push({ name: 'Register' })
 }
 
-// function toResetPwd() {
-// 	router.push({ name: 'ResetPwd' })
-// }
-
-function userLogin() {
-	// console.log(user)
-	axios({
-		method: 'post',
-		url: 'http://127.0.0.1:9000/api-chat/dchat-login/',
-		data: Qs.stringify({
-			username: user.username,
-			password: user.password,
-		}),
-	}).then((res) => {
-		console.log(res.data) // token
-		if (res.data == 'user none') {
+async function login() {
+	const formData = new FormData()
+	formData.append('username', user.username)
+	formData.append('password', user.password)
+	await userLogin(formData).then((res) => {
+		console.log(res) // token
+		if (res == 'user none') {
 			ElNotification({
 				title: '错误',
 				message: '用户名不存在！',
@@ -72,7 +62,7 @@ function userLogin() {
 			})
 			return
 		}
-		if (res.data == 'pwd arr') {
+		if (res == 'pwd arr') {
 			ElNotification({
 				title: '错误',
 				message: '密码错误！',
@@ -80,8 +70,8 @@ function userLogin() {
 			})
 			return
 		}
-		localStorage.setItem('token', res.data)
-		store.commit('setToken', res.data)
+		localStorage.setItem('token', res)
+		store.commit('setToken', res)
 		ElNotification({
 			title: '成功',
 			message: '登录成功',
@@ -90,6 +80,15 @@ function userLogin() {
 		router.push({ name: 'Homepage' })
 	})
 }
+
+// function userLogin() {
+// 	const formData = new FormData()
+// 	formData.append('username', user.username)
+// 	formData.append('password', user.password)
+// 	console.log(user)
+// 	store.dispatch('userLogin', formData)
+// 	router.replace({ path: '/' })
+// }
 </script>
 
 <style scoped>

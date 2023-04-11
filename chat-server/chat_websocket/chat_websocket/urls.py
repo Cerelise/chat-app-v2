@@ -18,9 +18,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from chat_app import views, api_urls
+from note import note_api_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', views.first_api),
-    path('api-chat/', include(api_urls))
+    path('api-chat/', include(api_urls)),
+    path('api-note/', include(note_api_urls))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,7 +4,7 @@ chat-server/chat_websocket/db.sqlite3
 chat-server/*/*/settings.py
 chat-server/*/*/__pycache__
 chat-server/chat_websocket/chat_app/__pycache__
-chat-server/chat_websocket/chat_app/migrations
+chat-server/chat_websocket/*/migrations
 chat-server/chat_websocket/upload/
 
 # Frontend

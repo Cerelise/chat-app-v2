@@ -2,7 +2,7 @@
 	<div class="msg-card">
 		<div class="card-container">
 			<div class="avatar">
-				<el-avatar size="medium" :src="avatar" />
+				<el-avatar size="default" :src="avatar" />
 			</div>
 			<div class="name">{{ name }}</div>
 			<div class="status">在线</div>

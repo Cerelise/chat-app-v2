@@ -21,7 +21,7 @@
 					/>
 				</el-badge>
 				<Navitem v-else to="/chat" icon="icon-message1" />
-				<Navitem to="/blog" icon="icon-file-fill" />
+				<Navitem to="/note" icon="icon-file-fill" />
 				<Navitem to="/all" icon="icon-ellipsis" />
 			</div>
 			<div class="nav-down">
@@ -41,6 +41,7 @@
 				@currentChat="openOtherChat"
 				name="userchat"
 			></router-view>
+			<router-view name="noteList"></router-view>
 			<template v-if="$route.path == '/'">
 				<div class="search-area">
 					<Search></Search>
@@ -201,6 +202,11 @@ const userinfo = computed(() => {
 })
 provide('userinfoEdit', userinfo)
 
+const userId = computed(() => {
+	return store.state.userinfo.id
+})
+provide('getNoteAuthor', userId)
+
 // 修改个人信息
 function goEditpage() {
 	showEditBox.value = true
@@ -210,7 +216,7 @@ provide('goEditpage', goEditpage)
 
 function leaveEditpage() {
 	showEditBox.value = false
-	console.log(showEditBox.value)
+	// console.log(showEditBox.value)
 }
 provide('leaveEditpage', leaveEditpage)
 
@@ -272,6 +278,16 @@ provide('pushSelfMsg', pushSelfMsg)
 // 自动登录
 function autoLogin() {
 	store.dispatch('tryAutoLogin', localStorage.getItem('token'))
+}
+
+// 统计聊天信息
+function unreadListCount() {
+	let arr = unreadList
+	let count = 0
+	arr.forEach((item) => {
+		count += item.data.length
+	})
+	return count
 }
 
 // 初始化websocket
@@ -383,6 +399,7 @@ function onClose(e) {
 
 onMounted(() => {
 	getUserList()
+	// getUserArticles()
 	if (localStorage.getItem('token')) {
 		initWebSocket()
 	}

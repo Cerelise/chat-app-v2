@@ -1,5 +1,5 @@
 import Homepage from './pages/Homepage.vue'
-import store from './store'
+import store from './stores/store'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -29,6 +29,41 @@ const routes = [
 				// props: (route) => ({
 				// 	id: route.params.otherUser.id,
 				// }),
+			},
+			{
+				path: 'note',
+				components: {
+					noteList: () => import('./pages/note/NoteList.vue'),
+					default: () => import('./pages/note/NoteDefault.vue'),
+					// noteEdit:() => import('./pages/NoteEditView.vue'),
+					// default: () => import('./pages/NoteDefault.vue'),
+				},
+			},
+			// 添加笔记
+			{
+				path: 'note-post',
+				components: {
+					noteList: () => import('./pages/note/NoteList.vue'),
+					default: () => import('./pages/note/NotePostView.vue'),
+				},
+			},
+			// 查看笔记
+			{
+				path: 'note-view/:id',
+				name: 'noteView',
+				components: {
+					noteList: () => import('./pages/note/NoteList.vue'),
+					default: () => import('./pages/note/NotePreview.vue'),
+				},
+			},
+			// 编辑文章
+			{
+				path: 'note-edit/:id',
+				name: 'noteEdit',
+				components: {
+					noteList: () => import('./pages/note/NoteList.vue'),
+					default: () => import('./pages/note/NoteEditView.vue'),
+				},
 			},
 		],
 		beforeEnter: (to, from, next) => {
